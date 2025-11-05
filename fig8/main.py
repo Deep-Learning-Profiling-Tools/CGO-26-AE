@@ -599,7 +599,7 @@ if __name__ == "__main__":
     parser.add_argument("--prec", type=str, choices=["fp8", "fp16"], default="fp16")
     parser.add_argument("--flatten-loops", dest="flatten_loops", action="store_true",
                         help="Enable loop flattening in Triton kernels.")
-    parser.set_defaults(flatten_loops=True)
+    parser.set_defaults(flatten_loops=False)
     args = parser.parse_args()
 
     LOOP_FLATTENING_ENABLED = args.flatten_loops

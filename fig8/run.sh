@@ -8,4 +8,4 @@ echo "Running matmul benchmark with loop flattening..."
 
 python3 ./main.py --flatten-loops
 
-proton-viewer -m tflop16/s -diff matmul.hatchet matmul_flatten.hatchet
+proton-viewer -m tflop8/s -diff matmul.hatchet matmul_flatten.hatchet

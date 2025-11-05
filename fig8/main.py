@@ -596,7 +596,7 @@ if __name__ == "__main__":
     parser.add_argument("-K", type=int, required=False, default=512)
     parser.add_argument("--K_range", type=int, nargs=2)
     parser.add_argument("--K_step", type=int, default=512)
-    parser.add_argument("--prec", type=str, choices=["fp8", "fp16"], default="fp16")
+    parser.add_argument("--prec", type=str, choices=["fp8", "fp16"], default="fp8")
     parser.add_argument("--flatten-loops", dest="flatten_loops", action="store_true",
                         help="Enable loop flattening in Triton kernels.")
     parser.set_defaults(flatten_loops=False)

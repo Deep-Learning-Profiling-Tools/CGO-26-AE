@@ -599,8 +599,6 @@ if __name__ == "__main__":
     parser.add_argument("--prec", type=str, choices=["fp8", "fp16"], default="fp16")
     parser.add_argument("--flatten-loops", dest="flatten_loops", action="store_true",
                         help="Enable loop flattening in Triton kernels.")
-    parser.add_argument("--no-flatten-loops", dest="flatten_loops", action="store_false",
-                        help="Disable loop flattening in Triton kernels.")
     parser.set_defaults(flatten_loops=True)
     args = parser.parse_args()
 
@@ -620,9 +618,10 @@ if __name__ == "__main__":
         validate(32, 32, 32, dtype)
         validate(8192, 8192, args.K_range[0], dtype)
 
-        proton.start("matmul", hook="triton")
+        profile_name = "matmul_flatten" if LOOP_FLATTENING_ENABLED else "matmul"
+        proton.start(profile_name, hook="triton")
         proton.deactivate()
         for K in range(args.K_range[0], args.K_range[1] + 1, args.K_step):
             bench(K, dtype)
         proton.finalize()
-        show_profile(args.prec, "matmul")
+        show_profile(args.prec, profile_name)

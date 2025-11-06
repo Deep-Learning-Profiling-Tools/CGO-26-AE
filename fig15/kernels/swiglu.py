@@ -6,6 +6,7 @@ import triton.profiler.language as pl
 from triton.profiler.mode import Default
 from typing import NamedTuple
 import argparse
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -123,6 +124,7 @@ def swiglu(x, beta=1.0, use_cuda_event: bool = False):
         end_event.record()
         torch.cuda.synchronize()
         elapsed_time = start_event.elapsed_time(end_event)
+        log_cuda_event_time("swiglu", elapsed_time)
         print(f"Outside swiglu elapsed time by cuda event: {elapsed_time} ms")
     
     return output
@@ -165,6 +167,7 @@ if __name__ == "__main__":
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
     args = parser.parse_args()
+    set_profile_enabled(args.profile)
     
     M, N, beta = args.M, args.N, args.beta
     

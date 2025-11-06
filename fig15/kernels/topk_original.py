@@ -3,6 +3,7 @@ import triton.language as tl
 import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -233,6 +234,7 @@ def benchmark_topk_original(M, N_experts, K, use_cuda_event: bool = False):
             end_event.record()
             torch.cuda.synchronize()
             elapsed_time = start_event.elapsed_time(end_event)
+            log_cuda_event_time("topk", elapsed_time)
             print(f"Outside topk elapsed time by cuda event: {elapsed_time} ms")
 
         print("TopK kernel executed successfully")
@@ -255,6 +257,7 @@ if __name__ == "__main__":
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
+    set_profile_enabled(args.profile)
     
     M, N, K = args.M, args.N, args.K
     

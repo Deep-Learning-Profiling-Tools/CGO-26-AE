@@ -5,6 +5,7 @@ import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
 import argparse
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -75,6 +76,7 @@ def instrumented_seeded_dropout(x, p, seed, use_cuda_event: bool = False):
         end_event.record()
         torch.cuda.synchronize()
         elapsed_time = start_event.elapsed_time(end_event)
+        log_cuda_event_time("seeded_dropout", elapsed_time)
         print(f"Outside seeded dropout elapsed time by cuda event: {elapsed_time} ms")
     return output
 
@@ -182,6 +184,7 @@ if __name__ == "__main__":
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
+    set_profile_enabled(args.profile)
     
     n_elements = args.n_elements
     p = args.dropout_prob

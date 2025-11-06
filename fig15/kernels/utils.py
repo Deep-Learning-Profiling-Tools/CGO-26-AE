@@ -1,8 +1,40 @@
 import os
 import json
+import csv
 import subprocess
+from pathlib import Path
+from threading import Lock
 from typing import Dict, List, Optional, Tuple
 import torch
+
+_CUDA_EVENT_CSV_PATH = Path(__file__).with_name("cuda_event_timings.csv")
+_CUDA_EVENT_CSV_LOCK = Lock()
+_PROFILE_ENABLED = False
+
+
+def set_profile_enabled(enabled: bool) -> None:
+    """Update global profiling state so timing logs tag runs consistently."""
+    global _PROFILE_ENABLED
+    _PROFILE_ENABLED = bool(enabled)
+
+
+def is_profile_enabled() -> bool:
+    """Return whether profiling/instrumentation was requested at the CLI."""
+    return _PROFILE_ENABLED
+
+
+def log_cuda_event_time(kernel_name: str, elapsed_ms: float, instrumented: Optional[bool] = None) -> None:
+    """Persist CUDA event timings to a CSV for cross-kernel comparisons."""
+    effective_instrumented = is_profile_enabled() if instrumented is None else instrumented
+    record = [kernel_name, "instrumented" if effective_instrumented else "baseline", f"{elapsed_ms:.6f}"]
+    with _CUDA_EVENT_CSV_LOCK:
+        file_exists = _CUDA_EVENT_CSV_PATH.exists()
+        _CUDA_EVENT_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with _CUDA_EVENT_CSV_PATH.open("a", newline="") as handle:
+            writer = csv.writer(handle)
+            if not file_exists:
+                writer.writerow(["kernel", "configuration", "elapsed_ms"])
+            writer.writerow(record)
 
 
 def is_hatchet_available():

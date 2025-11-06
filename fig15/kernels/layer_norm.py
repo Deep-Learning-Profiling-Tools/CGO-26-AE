@@ -5,6 +5,7 @@ import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
 import argparse
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -247,6 +248,7 @@ class InstrumentedLayerNorm(torch.autograd.Function):
             end_event.record()
             torch.cuda.synchronize()
             elapsed_time = start_event.elapsed_time(end_event)
+            log_cuda_event_time("layer_norm", elapsed_time)
             print(f"Outside layer_norm elapsed time by cuda event: {elapsed_time} ms")
     
         
@@ -382,6 +384,7 @@ if __name__ == "__main__":
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
 
     args = parser.parse_args()
+    set_profile_enabled(args.profile)
     
     M, N = args.rows, args.cols
     

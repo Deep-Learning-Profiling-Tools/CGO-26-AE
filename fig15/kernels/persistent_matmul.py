@@ -6,6 +6,7 @@ import triton.profiler.language as pl
 from triton.profiler.mode import Default
 from typing import NamedTuple
 import argparse
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -134,6 +135,7 @@ def persistent_matmul(a, b, use_cuda_event:bool = False):
         end_event.record()
         torch.cuda.synchronize()
         elapsed_time = start_event.elapsed_time(end_event)
+        log_cuda_event_time("persistent_matmul", elapsed_time)
         print(f"Outside persistent matmul elapsed time by cuda event: {elapsed_time} ms")
 
     return c
@@ -170,6 +172,7 @@ if __name__ == "__main__":
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
+    set_profile_enabled(args.profile)
     
     M, N, K = args.M, args.N, args.K
     

@@ -6,6 +6,7 @@ import triton.profiler.language as pl
 from triton.profiler.mode import Default
 from triton.runtime import driver
 import argparse
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -120,6 +121,7 @@ def instrumented_softmax(x, use_cuda_event: bool = False):
         end_event.record()
         torch.cuda.synchronize()
         elapsed_time = start_event.elapsed_time(end_event)
+        log_cuda_event_time("fused_softmax", elapsed_time)
         print(f"Outside swiglu elapsed time by cuda event: {elapsed_time} ms")
 
     return y
@@ -159,6 +161,8 @@ if __name__ == "__main__":
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
     args = parser.parse_args()
     
+    set_profile_enabled(args.profile)
+
     M, N = args.rows, args.cols
     
     if args.profile:

@@ -34,6 +34,7 @@ import triton.language as tl
 import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
+from utils import log_cuda_event_time, set_profile_enabled
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -199,6 +200,7 @@ def group_gemm_fn(group_A, group_B, use_cuda_event: bool = False):
         end_event.record()
         torch.cuda.synchronize()
         elapsed_time = start_event.elapsed_time(end_event)
+        log_cuda_event_time("grouped_gemm", elapsed_time)
         print(f"Outside grouped GEMM elapsed time by cuda event: {elapsed_time} ms")
 
     return group_C
@@ -662,6 +664,7 @@ if __name__ == "__main__":
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
+    set_profile_enabled(args.profile)
 
     if args.simple or args.profile:
         if args.profile:

@@ -167,6 +167,7 @@ if __name__ == "__main__":
     parser.add_argument("--K", type=int, default=4096, help="Matrix dimension K")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
+    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     
@@ -175,7 +176,7 @@ if __name__ == "__main__":
     if args.profile:
         proton_mode = Default(buffer_size=args.buffer_size)
         proton.start("persistent_matmul_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_persistent_matmul(M, N, K)
+        result = benchmark_persistent_matmul(M, N, K, use_cuda_event=args.use_cuda_event)
         proton.finalize()
         print(f"Profiled instrumented persistent matmul {M}x{N}x{K}")
     else:

@@ -392,7 +392,7 @@ if __name__ == "__main__":
     if args.profile:
         proton_mode = Default(buffer_size=args.buffer_size)
         proton.start(f"layer_norm_{args.mode}_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_instrumented_layer_norm(M, N, mode=args.mode)
+        result = benchmark_instrumented_layer_norm(M, N, mode=args.mode, use_cuda_event=args.use_cuda_event)
         proton.finalize()
         print(f"Profiled instrumented layer norm {args.mode} pass {M}x{N}")
     else:

@@ -659,6 +659,7 @@ if __name__ == "__main__":
         help="data to collect with Proton",
     )
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
+    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
 
@@ -672,7 +673,7 @@ if __name__ == "__main__":
                 data=args.data,
                 mode=proton_mode,
             )
-            result = simple_grouped_gemm_test(use_cuda_event=False)
+            result = simple_grouped_gemm_test(use_cuda_event=args.use_cuda_event)
             proton.finalize()
             print("Profiled original grouped GEMM")
         else:

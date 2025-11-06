@@ -163,7 +163,7 @@ if __name__ == "__main__":
     parser.add_argument("--beta", type=float, default=1.0, help="SwiGLU beta parameter")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-
+    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
     args = parser.parse_args()
     
     M, N, beta = args.M, args.N, args.beta
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     if args.profile:
         proton_mode = Default(buffer_size=args.buffer_size)
         proton.start("swiglu_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_swiglu(M, N, beta)
+        result = benchmark_swiglu(M, N, beta, use_cuda_event=args.use_cuda_event)
         proton.finalize()
         print(f"Profiled instrumented SwiGLU {M}x{N} (beta={beta})")
     else:

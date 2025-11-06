@@ -1,0 +1,94 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "frame": {
+                                            "name": "main_compute_loop",
+                                            "type": "function"
+                                        },
+                                        "metrics": {
+                                            "cycles": 5085984407,
+                                            "device_id": "0",
+                                            "device_type": "1",
+                                            "normalized_cycles": 26039.773531100083
+                                        }
+                                    },
+                                    {
+                                        "children": [],
+                                        "frame": {
+                                            "name": "output_phase",
+                                            "type": "function"
+                                        },
+                                        "metrics": {
+                                            "cycles": 227092682,
+                                            "device_id": "0",
+                                            "device_type": "1",
+                                            "normalized_cycles": 1162.6936963687995
+                                        }
+                                    },
+                                    {
+                                        "children": [],
+                                        "frame": {
+                                            "name": "setup",
+                                            "type": "function"
+                                        },
+                                        "metrics": {
+                                            "cycles": 382849362,
+                                            "device_id": "0",
+                                            "device_type": "1",
+                                            "normalized_cycles": 1960.153607487623
+                                        }
+                                    }
+                                ],
+                                "frame": {
+                                    "name": "kernel_start",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 6515933151,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 33360.97990435939
+                                }
+                            }
+                        ],
+                        "frame": {
+                            "name": "instrumented_seeded_dropout_kernel",
+                            "type": "function"
+                        },
+                        "metrics": {}
+                    }
+                ],
+                "frame": {
+                    "name": "seeded_dropout_50000000",
+                    "type": "function"
+                },
+                "metrics": {}
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {}
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 5120,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 2619000,
+                "num_sms": 132
+            }
+        }
+    }
+]

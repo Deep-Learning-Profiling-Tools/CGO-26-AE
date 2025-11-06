@@ -431,6 +431,9 @@ def triton_tma_perf_fn(a_ptrs, b_ptrs, c_ptrs, sizes, lds, group_size, dtype):
         group_size,
         FP8=torch.float8_e4m3fn == dtype,
         NUM_SM=num_sms(),
+        BLOCK_SIZE_M=64,
+        BLOCK_SIZE_N=64,
+        BLOCK_SIZE_K=64,
     )
 
 

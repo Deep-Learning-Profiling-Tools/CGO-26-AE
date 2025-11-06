@@ -28,13 +28,13 @@ def metadata_fn(
     grid_x, grid_y, grid_z = unpack_grid(grid)
     num_warps = metadata.num_warps
     num_stages = metadata.num_stages
-    cluster_x, cluster_y, cluster_z = metadata.cluster_dims
+    cluster_x, cluster_y, cluster_z = unpack_grid((metadata.num_ctas, ))
     shared_memory = metadata.shared
     M, K = args["a_ptr"].shape
     K, N = args["b_ptr"].shape
     return {
         "name":
-        f"instrumented_matmul_<grid:{grid_x}x{grid_y}x{grid_z}>_<cluster:{cluster_x}x{cluster_y}x{cluster_z}>_<warps:{num_warps}>_<shared:{shared_memory}>_<stages:{num_stages}>",
+        f"matmul_<grid:{grid_x}x{grid_y}x{grid_z}>_<cluster:{cluster_x}x{cluster_y}x{cluster_z}>_<warps:{num_warps}>_<shared:{shared_memory}>_<stages:{num_stages}>",
         "flops": 2 * M * N * K,
         "bytes": (M * N + N * K + K * M) * args["a_ptr"].element_size(),
     }

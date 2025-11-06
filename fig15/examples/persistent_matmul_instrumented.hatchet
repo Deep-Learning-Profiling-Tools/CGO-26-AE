@@ -1,0 +1,65 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "frame": {
+                                    "name": "compute_phase",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 12702939463,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 24058597.467803016
+                                }
+                            }
+                        ],
+                        "frame": {
+                            "name": "kernel_start",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 12703372997,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 24059418.554924227
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "persistent_matmul_kernel [M=4096, N=4096, K=4096]",
+                    "type": "function"
+                },
+                "metrics": {
+                    "bytes": 603979776,
+                    "flops": 824633720832.0
+                }
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {
+            "bytes": 0,
+            "flops": 0
+        }
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 5120,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 2619000,
+                "num_sms": 132
+            }
+        }
+    }
+]

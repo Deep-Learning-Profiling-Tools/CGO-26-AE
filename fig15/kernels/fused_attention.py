@@ -808,23 +808,34 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", action="store_true", help="Enable profiling")
+    parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend, which should be very little overheads")
+    parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel intrumentation profiling to get cycles, which brings more overheads. Can be enabled at the same time with cupti timing.")
     parser.add_argument("--simple", action="store_true", help="Run simple test")
-    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
+    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data type to collect with Proton instrumentation mode")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.profile)
     
-    if args.simple or args.profile:
-        if args.profile:
+    if args.simple:
+        if args.profile and args.instrument:
+            # enable cupti timing and instrumentation at the same time
             proton_mode = Default(buffer_size=args.buffer_size)
-            proton.start("fused_attention_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
+            cupti_session = proton.start("fused_attention_cupti", backend="cupti", hook="triton", data="tree")
+            intrument_session = proton.start("fused_attention_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
             result = simple_fused_attention_test(use_cuda_event=args.use_cuda_event)
-            proton.finalize()
-            print("Profiled fused attention")
+            proton.finalize(intrument_session)
+            proton.finalize(cupti_session)
+            print("Profiled fused attention with both cupti and instrumentation profiling")
+        elif args.profile and not args.instrument:
+            # enable cupti timing only
+            cupti_session = proton.start("fused_attention_cupti", backend="cupti", hook="triton", data="tree")
+            result = simple_fused_attention_test(use_cuda_event=args.use_cuda_event)
+            proton.finalize(cupti_session)
+            print("Profiled fused attention with cupti profiling")
         else:
+            # simple run without any proton profiling
             result = simple_fused_attention_test(use_cuda_event=True)
             print("Ran fused attention")
     else:

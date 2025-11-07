@@ -16,6 +16,7 @@ Extra Credits:
 import pytest
 import torch
 import os
+from pathlib import Path
 
 import triton
 import triton.language as tl
@@ -23,7 +24,12 @@ import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
 from triton.tools.tensor_descriptor import TensorDescriptor
-from utils import log_cuda_event_time, set_profile_enabled
+from utils import (
+    extract_kernel_time_from_hatchet,
+    log_cupti_profile_time,
+    log_cuda_event_time,
+    set_profile_enabled,
+)
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -816,28 +822,47 @@ if __name__ == "__main__":
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
-    set_profile_enabled(args.profile)
+    set_profile_enabled(args.instrument)
     
+    sessions = []
+    cupti_profile_name = None
+    if args.profile:
+        cupti_profile_name = f"fused_attention_cupti_wInstrument{args.instrument}"
+        cupti_session = proton.start(
+            cupti_profile_name,
+            backend="cupti",
+            hook="triton",
+            data="tree",
+        )
+        sessions.append(cupti_session)
+    if args.instrument:
+        proton_mode = Default(buffer_size=args.buffer_size)
+        instrument_session = proton.start(
+            "fused_attention_instrumented",
+            backend="instrumentation",
+            hook="triton",
+            data=args.data,
+            mode=proton_mode,
+        )
+        sessions.append(instrument_session)
+
     if args.simple:
-        if args.profile and args.instrument:
-            # enable cupti timing and instrumentation at the same time
-            proton_mode = Default(buffer_size=args.buffer_size)
-            cupti_session = proton.start("fused_attention_cupti", backend="cupti", hook="triton", data="tree")
-            intrument_session = proton.start("fused_attention_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-            result = simple_fused_attention_test(use_cuda_event=args.use_cuda_event)
-            proton.finalize(intrument_session)
-            proton.finalize(cupti_session)
-            print("Profiled fused attention with both cupti and instrumentation profiling")
-        elif args.profile and not args.instrument:
-            # enable cupti timing only
-            cupti_session = proton.start("fused_attention_cupti", backend="cupti", hook="triton", data="tree")
-            result = simple_fused_attention_test(use_cuda_event=args.use_cuda_event)
-            proton.finalize(cupti_session)
-            print("Profiled fused attention with cupti profiling")
-        else:
-            # simple run without any proton profiling
-            result = simple_fused_attention_test(use_cuda_event=True)
-            print("Ran fused attention")
+        _ = simple_fused_attention_test(
+            use_cuda_event=args.use_cuda_event if args.instrument else True
+        )
     else:
         # only works on post-Ampere GPUs right now
         bench_flash_attention.run(save_path=".", print_data=True)
+
+    for session in reversed(sessions):
+        proton.finalize(session)
+
+    if args.profile and cupti_profile_name:
+        profile_path = Path(f"{cupti_profile_name}.hatchet")
+        try:
+            kernel_time_ns = extract_kernel_time_from_hatchet(profile_path, r"_attn_fwd")
+            log_cupti_profile_time("fused_attention", args.instrument, kernel_time_ns)
+        except Exception as exc:
+            print(f"Failed to log CUPTI timing from {profile_path}: {exc}")
+
+    print(f"Completed fused attention run (simple={args.simple}, cupti={args.profile}, instrument={args.instrument})")

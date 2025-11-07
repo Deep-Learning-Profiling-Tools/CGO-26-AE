@@ -5,12 +5,23 @@ import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
 import argparse
-from utils import log_cuda_event_time, set_profile_enabled
+from pathlib import Path
+from utils import (
+    extract_kernel_time_from_hatchet,
+    log_cupti_profile_time,
+    log_cuda_event_time,
+    set_profile_enabled,
+)
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
 
 DEVICE = triton.runtime.driver.active.get_active_torch_device()
+
+_CUPTI_KERNEL_PATTERNS = {
+    "forward": r"instrumented_layer_norm_fwd_kernel",
+    "backward": r"instrumented_layer_norm_bwd_kernel",
+}
 
 
 @triton.jit
@@ -375,16 +386,18 @@ def test_layer_norm_correctness(M, N, dtype, eps=1e-5, device=DEVICE):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", action="store_true", help="Enable profiling")
+    parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend")
+    parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel instrumentation profiling to get cycles (can run with cupti)")
     parser.add_argument("--rows", type=int, default=16384, help="Number of rows")
     parser.add_argument("--cols", type=int, default=8192, help="Number of columns")
     parser.add_argument("--mode", choices=["forward", "backward"], default="forward", help="Benchmark mode")
     parser.add_argument("--test", action="store_true", help="Run correctness test")
-    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
+    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
+    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
-    set_profile_enabled(args.profile)
+    set_profile_enabled(args.instrument)
     
     M, N = args.rows, args.cols
     
@@ -392,12 +405,39 @@ if __name__ == "__main__":
         test_layer_norm_correctness(M, N, torch.float16)
         exit(0)
     
+    sessions = []
+    cupti_profile_name = None
     if args.profile:
+        cupti_profile_name = f"layer_norm_cupti_wInstrument{args.instrument}"
+        cupti_session = proton.start(
+            cupti_profile_name, backend="cupti", hook="triton", data="tree"
+        )
+        sessions.append(cupti_session)
+    if args.instrument:
         proton_mode = Default(buffer_size=args.buffer_size)
-        proton.start(f"layer_norm_{args.mode}_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_instrumented_layer_norm(M, N, mode=args.mode, use_cuda_event=args.use_cuda_event)
-        proton.finalize()
-        print(f"Profiled instrumented layer norm {args.mode} pass {M}x{N}")
-    else:
-        result = benchmark_instrumented_layer_norm(M, N, mode=args.mode, use_cuda_event=True)
-        print(f"Ran instrumented layer norm {args.mode} pass {M}x{N}")
+        instrument_session = proton.start(
+            f"layer_norm_{args.mode}_instrumented",
+            backend="instrumentation",
+            hook="triton",
+            data=args.data,
+            mode=proton_mode,
+        )
+        sessions.append(instrument_session)
+
+    result = benchmark_instrumented_layer_norm(
+        M, N, mode=args.mode, use_cuda_event=args.use_cuda_event if args.instrument else True
+    )
+
+    for session in reversed(sessions):
+        proton.finalize(session)
+
+    if args.profile and cupti_profile_name:
+        profile_path = Path(f"{cupti_profile_name}.hatchet")
+        try:
+            pattern = _CUPTI_KERNEL_PATTERNS.get(args.mode, r"instrumented_layer_norm")
+            kernel_time_ns = extract_kernel_time_from_hatchet(profile_path, pattern)
+            log_cupti_profile_time(f"layer_norm_{args.mode}", args.instrument, kernel_time_ns)
+        except Exception as exc:
+            print(f"Failed to log CUPTI timing from {profile_path}: {exc}")
+
+    print(f"Completed layer norm {args.mode} pass {M}x{N} (cupti={args.profile}, instrument={args.instrument})")

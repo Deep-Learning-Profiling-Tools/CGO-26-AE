@@ -6,7 +6,13 @@ import triton.profiler.language as pl
 from triton.profiler.mode import Default
 from typing import NamedTuple
 import argparse
-from utils import log_cuda_event_time, set_profile_enabled
+from pathlib import Path
+from utils import (
+    extract_kernel_time_from_hatchet,
+    log_cupti_profile_time,
+    log_cuda_event_time,
+    set_profile_enabled,
+)
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -177,23 +183,50 @@ def benchmark_instrumented_triton(M, N, K, device="cuda", use_cuda_event: bool =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", action="store_true", help="Enable profiling")
+    parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend")
+    parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel instrumentation profiling to get cycles (can run with cupti)")
     parser.add_argument("--matrix-size", type=int, default=4096, help="Matrix size")
-    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
+    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
-    set_profile_enabled(args.profile)
+    set_profile_enabled(args.instrument)
 
     M = N = K = args.matrix_size
     
+    sessions = []
+    cupti_profile_name = None
     if args.profile:
+        cupti_profile_name = f"matmul_cupti_wInstrument{args.instrument}"
+        cupti_session = proton.start(
+            cupti_profile_name, backend="cupti", hook="triton", data="tree"
+        )
+        sessions.append(cupti_session)
+    if args.instrument:
         proton_mode = Default(buffer_size=args.buffer_size)
-        proton.start("matmul_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_instrumented_triton(M, N, K, use_cuda_event=args.use_cuda_event)
-        proton.finalize()
-        print(f"Profiled instrumented Triton matmul {M}x{N}x{K}")
-    else:
-        result = benchmark_instrumented_triton(M, N, K, use_cuda_event=True)
-        print(f"Ran instrumented Triton matmul {M}x{N}x{K}")
+        instrument_session = proton.start(
+            "matmul_instrumented",
+            backend="instrumentation",
+            hook="triton",
+            data=args.data,
+            mode=proton_mode,
+        )
+        sessions.append(instrument_session)
+
+    result = benchmark_instrumented_triton(
+        M, N, K, use_cuda_event=args.use_cuda_event if args.instrument else True
+    )
+
+    for session in reversed(sessions):
+        proton.finalize(session)
+
+    if args.profile and cupti_profile_name:
+        profile_path = Path(f"{cupti_profile_name}.hatchet")
+        try:
+            kernel_time_ns = extract_kernel_time_from_hatchet(profile_path, r"matmul_<grid:")
+            log_cupti_profile_time("matmul", args.instrument, kernel_time_ns)
+        except Exception as exc:
+            print(f"Failed to log CUPTI timing from {profile_path}: {exc}")
+
+    print(f"Completed Triton matmul {M}x{N}x{K} (cupti={args.profile}, instrument={args.instrument})")

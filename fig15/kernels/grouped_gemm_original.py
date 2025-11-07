@@ -28,18 +28,26 @@ of gemms. The scheduling is static and we do it on device.
 
 from typing import Optional
 import torch
+from pathlib import Path
 
 import triton
 import triton.language as tl
 import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
-from utils import log_cuda_event_time, set_profile_enabled
+from utils import (
+    extract_kernel_time_from_hatchet,
+    log_cupti_profile_time,
+    log_cuda_event_time,
+    set_profile_enabled,
+)
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
 
 DEVICE = triton.runtime.driver.active.get_active_torch_device()
+
+CUPTI_KERNEL_PATTERN = r"grouped_matmul_kernel"
 
 
 def is_cuda():
@@ -651,37 +659,61 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", action="store_true", help="Enable profiling")
+    parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend")
+    parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel instrumentation profiling to get cycles (can run with cupti)")
     parser.add_argument("--simple", action="store_true", help="Run simple test")
     parser.add_argument(
         "--data",
         type=str,
         default="tree",
         choices=["tree", "trace"],
-        help="data to collect with Proton",
+        help="data to collect with Proton instrumentation backend",
     )
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
-    set_profile_enabled(args.profile)
+    set_profile_enabled(args.instrument)
 
-    if args.simple or args.profile:
+    if args.simple or args.profile or args.instrument:
+        sessions = []
+        cupti_profile_name = None
         if args.profile:
+            cupti_profile_name = f"grouped_gemm_cupti_wInstrument{args.instrument}"
+            cupti_session = proton.start(
+                cupti_profile_name,
+                backend="cupti",
+                hook="triton",
+                data="tree",
+            )
+            sessions.append(cupti_session)
+        if args.instrument:
             proton_mode = Default(buffer_size=args.buffer_size)
-            proton.start(
+            instrument_session = proton.start(
                 "grouped_gemm_original_instrumented",
                 backend="instrumentation",
                 hook="triton",
                 data=args.data,
                 mode=proton_mode,
             )
-            result = simple_grouped_gemm_test(use_cuda_event=args.use_cuda_event)
-            proton.finalize()
-            print("Profiled original grouped GEMM")
-        else:
-            result = simple_grouped_gemm_test(use_cuda_event=True)
-            print("Ran original grouped GEMM")
+            sessions.append(instrument_session)
+
+        result = simple_grouped_gemm_test(
+            use_cuda_event=args.use_cuda_event if args.instrument else True
+        )
+
+        for session in reversed(sessions):
+            proton.finalize(session)
+
+        if args.profile and cupti_profile_name:
+            profile_path = Path(f"{cupti_profile_name}.hatchet")
+            try:
+                kernel_time_ns = extract_kernel_time_from_hatchet(profile_path, CUPTI_KERNEL_PATTERN)
+                log_cupti_profile_time("grouped_gemm", args.instrument, kernel_time_ns)
+            except Exception as exc:
+                print(f"Failed to log CUPTI timing from {profile_path}: {exc}")
+
+        print(f"Completed original grouped GEMM (cupti={args.profile}, instrument={args.instrument}, simple={args.simple})")
     else:
         # Run original benchmarks
         benchmark_square_matrices.run(show_plots=True, print_data=True)

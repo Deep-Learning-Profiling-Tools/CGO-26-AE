@@ -6,7 +6,13 @@ import triton.profiler.language as pl
 from triton.profiler.mode import Default
 from typing import NamedTuple
 import argparse
-from utils import log_cuda_event_time, set_profile_enabled
+from pathlib import Path
+from utils import (
+    extract_kernel_time_from_hatchet,
+    log_cupti_profile_time,
+    log_cuda_event_time,
+    set_profile_enabled,
+)
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
@@ -159,24 +165,51 @@ def benchmark_swiglu(M, N, beta=1.0, use_cuda_event: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", action="store_true", help="Enable profiling")
+    parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend")
+    parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel instrumentation profiling to get cycles (can run with cupti)")
     parser.add_argument("--M", type=int, default=16384, help="Sequence length")
     parser.add_argument("--N", type=int, default=8192, help="Hidden dimension")
     parser.add_argument("--beta", type=float, default=1.0, help="SwiGLU beta parameter")
-    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
+    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
     args = parser.parse_args()
-    set_profile_enabled(args.profile)
+    set_profile_enabled(args.instrument)
     
     M, N, beta = args.M, args.N, args.beta
     
+    sessions = []
+    cupti_profile_name = None
     if args.profile:
+        cupti_profile_name = f"swiglu_cupti_wInstrument{args.instrument}"
+        cupti_session = proton.start(
+            cupti_profile_name, backend="cupti", hook="triton", data="tree"
+        )
+        sessions.append(cupti_session)
+    if args.instrument:
         proton_mode = Default(buffer_size=args.buffer_size)
-        proton.start("swiglu_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_swiglu(M, N, beta, use_cuda_event=args.use_cuda_event)
-        proton.finalize()
-        print(f"Profiled instrumented SwiGLU {M}x{N} (beta={beta})")
-    else:
-        result = benchmark_swiglu(M, N, beta, use_cuda_event=True)
-        print(f"Ran instrumented SwiGLU {M}x{N} (beta={beta})")
+        instrument_session = proton.start(
+            "swiglu_instrumented",
+            backend="instrumentation",
+            hook="triton",
+            data=args.data,
+            mode=proton_mode,
+        )
+        sessions.append(instrument_session)
+
+    result = benchmark_swiglu(
+        M, N, beta, use_cuda_event=args.use_cuda_event if args.instrument else True
+    )
+
+    for session in reversed(sessions):
+        proton.finalize(session)
+
+    if args.profile and cupti_profile_name:
+        profile_path = Path(f"{cupti_profile_name}.hatchet")
+        try:
+            kernel_time_ns = extract_kernel_time_from_hatchet(profile_path, r"swiglu_kernel")
+            log_cupti_profile_time("swiglu", args.instrument, kernel_time_ns)
+        except Exception as exc:
+            print(f"Failed to log CUPTI timing from {profile_path}: {exc}")
+
+    print(f"Completed SwiGLU {M}x{N} (beta={beta}) (cupti={args.profile}, instrument={args.instrument})")

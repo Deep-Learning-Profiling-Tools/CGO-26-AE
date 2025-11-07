@@ -5,12 +5,22 @@ import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
 import argparse
-from utils import log_cuda_event_time, set_profile_enabled
+from pathlib import Path
+from utils import (
+    extract_kernel_time_from_hatchet,
+    log_cupti_profile_time,
+    log_cuda_event_time,
+    set_profile_enabled,
+)
 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
 
 DEVICE = triton.runtime.driver.active.get_active_torch_device()
+_CUPTI_KERNEL_PATTERNS = {
+    "seeded": r"instrumented_seeded_dropout_kernel",
+    "traditional": r"instrumented_dropout_kernel",
+}
 
 
 @triton.jit
@@ -173,33 +183,61 @@ def naive_dropout(x, p, seed=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", action="store_true", help="Enable profiling")
+    parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend")
+    parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel instrumentation profiling to get cycles (can run with cupti)")
     parser.add_argument("--n-elements", type=int, default=50000000, help="Number of elements")
     parser.add_argument("--dropout-prob", type=float, default=0.5, help="Dropout probability")
     parser.add_argument("--seed", type=int, default=123, help="Random seed")
     parser.add_argument("--dropout-type", choices=["seeded", "traditional"], default="seeded",
                         help="Type of dropout to benchmark")
-    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton")
+    parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
     parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
-    set_profile_enabled(args.profile)
+    set_profile_enabled(args.instrument)
     
     n_elements = args.n_elements
     p = args.dropout_prob
     seed = args.seed
     dropout_type = args.dropout_type
     
+    sessions = []
+    cupti_profile_name = None
     if args.profile:
+        cupti_profile_name = f"dropout_cupti_wInstrument{args.instrument}"
+        cupti_session = proton.start(
+            cupti_profile_name, backend="cupti", hook="triton", data="tree"
+        )
+        sessions.append(cupti_session)
+    if args.instrument:
         proton_mode = Default(buffer_size=args.buffer_size)
-        proton.start(f"dropout_{dropout_type}_instrumented", backend="instrumentation", hook="triton", data=args.data, mode=proton_mode)
-        result = benchmark_instrumented_dropout(n_elements, p, seed, dropout_type=dropout_type, use_cuda_event=args.use_cuda_event)
-        proton.finalize()
-        print(f"Profiled instrumented {dropout_type} dropout {n_elements} elements")
-    else:
-        result = benchmark_instrumented_dropout(n_elements, p, seed, dropout_type=dropout_type, use_cuda_event=True)
-        print(f"Ran instrumented {dropout_type} dropout {n_elements} elements")
+        instrument_session = proton.start(
+            f"dropout_{dropout_type}_instrumented",
+            backend="instrumentation",
+            hook="triton",
+            data=args.data,
+            mode=proton_mode,
+        )
+        sessions.append(instrument_session)
+
+    result = benchmark_instrumented_dropout(
+        n_elements, p, seed, dropout_type=dropout_type, use_cuda_event=args.use_cuda_event if args.instrument else True
+    )
+
+    for session in reversed(sessions):
+        proton.finalize(session)
+
+    if args.profile and cupti_profile_name:
+        profile_path = Path(f"{cupti_profile_name}.hatchet")
+        try:
+            pattern = _CUPTI_KERNEL_PATTERNS.get(dropout_type, r"instrumented_seeded_dropout_kernel")
+            kernel_time_ns = extract_kernel_time_from_hatchet(profile_path, pattern)
+            log_cupti_profile_time(f"{dropout_type}_dropout", args.instrument, kernel_time_ns)
+        except Exception as exc:
+            print(f"Failed to log CUPTI timing from {profile_path}: {exc}")
+
+    print(f"Completed {dropout_type} dropout benchmark ({n_elements} elems) (cupti={args.profile}, instrument={args.instrument})")
     
     # Verify correctness for seeded dropout
     if dropout_type == "seeded":

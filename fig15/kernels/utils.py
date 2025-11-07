@@ -1,6 +1,7 @@
 import os
 import json
 import csv
+import re
 import subprocess
 from pathlib import Path
 from threading import Lock
@@ -10,6 +11,8 @@ import torch
 _CUDA_EVENT_CSV_PATH = Path(__file__).with_name("cuda_event_timings.csv")
 _CUDA_EVENT_CSV_LOCK = Lock()
 _PROFILE_ENABLED = False
+_CUPTI_TIMING_CSV_PATH = Path(__file__).with_name("cupti_profile_timings.csv")
+_CUPTI_TIMING_CSV_LOCK = Lock()
 
 
 def set_profile_enabled(enabled: bool) -> None:
@@ -35,6 +38,133 @@ def log_cuda_event_time(kernel_name: str, elapsed_ms: float, instrumented: Optio
             if not file_exists:
                 writer.writerow(["kernel", "configuration", "elapsed_ms"])
             writer.writerow(record)
+
+
+def log_cupti_profile_time(kernel_name: str, instrumented: bool, time_ns: float) -> None:
+    """Append CUPTI-derived kernel timings into a CSV for later analysis."""
+    record = [
+        kernel_name,
+        "instrumented" if instrumented else "baseline",
+        f"{time_ns:.0f}",
+        f"{time_ns / 1e6:.6f}",
+    ]
+    with _CUPTI_TIMING_CSV_LOCK:
+        file_exists = _CUPTI_TIMING_CSV_PATH.exists()
+        _CUPTI_TIMING_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with _CUPTI_TIMING_CSV_PATH.open("a", newline="") as handle:
+            writer = csv.writer(handle)
+            if not file_exists:
+                writer.writerow(["kernel", "configuration", "time_ns", "time_ms"])
+            writer.writerow(record)
+
+
+def _extract_time_values(metrics: Dict) -> List[float]:
+    values = []
+    for key, value in (metrics or {}).items():
+        if not isinstance(value, (int, float)):
+            continue
+        key_lower = key.lower()
+        if "/s" in key_lower:
+            continue
+        if ("time" in key_lower or "duration" in key_lower) and any(unit in key_lower for unit in ("ns", "us", "ms", "s")):
+            multiplier = 1.0
+            if "ns" in key_lower:
+                multiplier = 1.0
+            elif "us" in key_lower:
+                multiplier = 1e3
+            elif "ms" in key_lower:
+                multiplier = 1e6
+            elif "s" in key_lower:
+                multiplier = 1e9
+            values.append(float(value) * multiplier)
+    return values
+
+
+def _collect_time_metrics(node: Dict, totals: List[float]) -> None:
+    totals.extend(_extract_time_values(node.get("metrics")))
+    for child in node.get("children", []):
+        _collect_time_metrics(child, totals)
+
+
+def extract_total_time_from_hatchet(path: Path) -> float:
+    """Return the largest time-like metric (in nanoseconds) found in a hatchet JSON profile."""
+    with path.open() as handle:
+        data = json.load(handle)
+
+    totals: List[float] = []
+    for root in data if isinstance(data, list) else [data]:
+        _collect_time_metrics(root, totals)
+
+    if not totals:
+        raise ValueError(f"No timing metrics found in hatchet profile: {path}")
+    return max(totals)
+
+
+def summarize_cupti_profiles(profile_dir: Path, output_csv: Path) -> Path:
+    """Aggregate total timings from CUPTI hatchet profiles into a CSV."""
+    profile_dir = Path(profile_dir)
+    output_csv = Path(output_csv)
+    hatchet_files = sorted(profile_dir.glob("*_cupti_wInstrument*.hatchet"))
+
+    if not hatchet_files:
+        raise FileNotFoundError(f"No CUPTI hatchet files found in {profile_dir}")
+
+    rows = []
+    pattern = re.compile(r"^(?P<kernel>.+)_cupti_wInstrument(?P<instrument>True|False)$")
+
+    for path in hatchet_files:
+        match = pattern.match(path.stem)
+        if not match:
+            continue
+        kernel = match.group("kernel")
+        instrumented = match.group("instrument") == "True"
+        total_ns = extract_total_time_from_hatchet(path)
+        rows.append(
+            {
+                "kernel": kernel,
+                "instrumented": instrumented,
+                "time_ns": f"{total_ns:.0f}",
+                "time_ms": f"{total_ns / 1e6:.6f}",
+            }
+        )
+
+    if not rows:
+        raise ValueError(f"No CUPTI hatchet files matched expected naming in {profile_dir}")
+
+    rows.sort(key=lambda r: (r["kernel"], r["instrumented"]))
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+
+    with output_csv.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["kernel", "instrumented", "time_ns", "time_ms"])
+        writer.writeheader()
+        writer.writerows(rows)
+
+    return output_csv
+
+
+def extract_kernel_time_from_hatchet(path: Path, pattern: str) -> float:
+    """Sum timing metrics for frames whose name matches the provided regex pattern."""
+    regex = re.compile(pattern)
+
+    with path.open() as handle:
+        data = json.load(handle)
+
+    totals: List[float] = []
+
+    def visit(node: Dict) -> None:
+        frame = node.get("frame") or {}
+        name = frame.get("name", "")
+        if regex.search(name):
+            totals.extend(_extract_time_values(node.get("metrics")))
+        for child in node.get("children", []):
+            visit(child)
+
+    for root in data if isinstance(data, list) else [data]:
+        visit(root)
+
+    if not totals:
+        raise ValueError(f"No matching kernel '{pattern}' found in {path}")
+    return sum(totals)
 
 
 def is_hatchet_available():

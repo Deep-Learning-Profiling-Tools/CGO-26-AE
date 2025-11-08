@@ -4,3 +4,6 @@
 [submodule "submodules/unsloth-zoo"]
 	path = submodules/unsloth-zoo
 	url = https://github.com/unslothai/unsloth-zoo.git
+[submodule "submodules/unsloth"]
+	path = submodules/unsloth
+	url = https://github.com/unslothai/unsloth.git

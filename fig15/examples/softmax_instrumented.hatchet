@@ -1,0 +1,130 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "frame": {
+                                    "name": "main_compute_loop",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 6736908458,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 3189824.080492438
+                                }
+                            },
+                            {
+                                "children": [],
+                                "frame": {
+                                    "name": "setup",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 987091,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 467.372632575739
+                                }
+                            }
+                        ],
+                        "frame": {
+                            "name": "kernel_start",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 6740376037,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 3191465.926609848
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "instrumented_softmax_kernel",
+                    "type": "function"
+                },
+                "metrics": {}
+            },
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "frame": {
+                                            "name": "main_compute_loop",
+                                            "type": "function"
+                                        },
+                                        "metrics": {
+                                            "cycles": 1327814490,
+                                            "device_id": "0",
+                                            "device_type": "1",
+                                            "normalized_cycles": 628700.0426136355
+                                        }
+                                    },
+                                    {
+                                        "children": [],
+                                        "frame": {
+                                            "name": "setup",
+                                            "type": "function"
+                                        },
+                                        "metrics": {
+                                            "cycles": 203147,
+                                            "device_id": "0",
+                                            "device_type": "1",
+                                            "normalized_cycles": 96.18702651515224
+                                        }
+                                    }
+                                ],
+                                "frame": {
+                                    "name": "kernel_start",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 1328512004,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 629030.304924242
+                                }
+                            }
+                        ],
+                        "frame": {
+                            "name": "instrumented_softmax_kernel",
+                            "type": "function"
+                        },
+                        "metrics": {}
+                    }
+                ],
+                "frame": {
+                    "name": "softmax_16384_8192",
+                    "type": "function"
+                },
+                "metrics": {}
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {}
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 5120,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 2619000,
+                "num_sms": 132
+            }
+        }
+    }
+]

@@ -1,0 +1,72 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "frame": {
+                                    "name": "compute_phase",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 56969167013,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 107896149.64583357
+                                }
+                            },
+                            {
+                                "children": [],
+                                "frame": {
+                                    "name": "setup_phase",
+                                    "type": "function"
+                                },
+                                "metrics": {
+                                    "cycles": 89300,
+                                    "device_id": "0",
+                                    "device_type": "1",
+                                    "normalized_cycles": 169.12878787879038
+                                }
+                            }
+                        ],
+                        "frame": {
+                            "name": "kernel_start",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "cycles": 56971715437,
+                            "device_id": "0",
+                            "device_type": "1",
+                            "normalized_cycles": 107900976.2064396
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "grouped_matmul_kernel",
+                    "type": "function"
+                },
+                "metrics": {}
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {}
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "90",
+                "bus_width": 5120,
+                "clock_rate": 1980000,
+                "memory_clock_rate": 2619000,
+                "num_sms": 132
+            }
+        }
+    }
+]

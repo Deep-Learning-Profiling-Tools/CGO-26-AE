@@ -1,12 +1,6 @@
 [submodule "submodules/triton"]
 	path = submodules/triton
 	url = https://github.com/triton-lang/triton.git
-[submodule "submodules/unsloth-zoo"]
-	path = submodules/unsloth-zoo
-	url = https://github.com/unslothai/unsloth-zoo.git
-[submodule "submodules/unsloth"]
-	path = submodules/unsloth
-	url = https://github.com/unslothai/unsloth.git
-[submodule "submodules/pytorch"]
-	path = submodules/pytorch
-	url = https://github.com/pytorch/pytorch.git
+[submodule "submodules/vision"]
+	path = submodules/vision
+	url = https://github.com/pytorch/vision.git

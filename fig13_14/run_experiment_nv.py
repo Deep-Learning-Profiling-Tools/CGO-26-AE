@@ -149,26 +149,42 @@ def clean_experiment_files():
     print("\nCleanup completed!")
 
 
-def run_model_experiment(model_file: str, model_runners_dir: Path, output_dir: Path, dry_run: bool = False) -> Dict[str, Optional[float]]:
-    """Run all experiments for a single model."""
+def get_file_size(file_path: Path) -> Optional[int]:
+    """Get file size in bytes. Returns None if file doesn't exist."""
+    try:
+        if file_path.exists():
+            return file_path.stat().st_size
+        else:
+            return None
+    except Exception as e:
+        print(f"  Error getting file size for {file_path}: {e}")
+        return None
+
+
+def run_model_experiment(model_file: str, model_runners_dir: Path, output_dir: Path, dry_run: bool = False) -> Tuple[Dict[str, Optional[float]], Dict[str, Optional[int]]]:
+    """Run all experiments for a single model and measure profiling file sizes."""
     model_name = MODEL_MAPPING.get(model_file, model_file.replace(".py", ""))
+    model_base_name = model_file.replace('.py', '')
     print(f"\n{'='*60}")
     print(f"Running experiments for {model_name}")
     print(f"{'='*60}")
 
     model_path = model_runners_dir / model_file
     results = {}
+    file_sizes = {}
+
+    script_dir = output_dir.parent
 
     # Warmup run
     print("\n[Warmup run]")
-    warmup_log = output_dir / f"{model_file.replace('.py', '')}_warmup.log"
+    warmup_log = output_dir / f"{model_base_name}_warmup.log"
     run_command(["python", str(model_path)], str(warmup_log), dry_run=dry_run)
 
     # Run each profiling option
     for option_name, option_args in PROFILING_OPTIONS:
         print(f"\n[Running with {option_name}]")
 
-        output_file = output_dir / f"{model_file.replace('.py', '')}_{option_name}.log"
+        output_file = output_dir / f"{model_base_name}_{option_name}.log"
 
         if option_name == "nsys":
             # Special handling for nsys
@@ -184,15 +200,33 @@ def run_model_experiment(model_file: str, model_runners_dir: Path, output_dir: P
             success = run_command(cmd, str(output_file), dry_run=dry_run)
 
         if success:
-            time = extract_training_time(str(output_file), dry_run=dry_run)
-            results[option_name] = time
-            if time:
-                print(f"  Training time: {time:.2f} seconds")
+            time_val = extract_training_time(str(output_file), dry_run=dry_run)
+            results[option_name] = time_val
+            if time_val:
+                print(f"  Training time: {time_val:.2f} seconds")
         else:
             results[option_name] = None
             print(f"  Execution failed")
 
-    return results
+        # Measure profiling file size
+        if not dry_run and option_name in ["torch", "proton", "nsys"]:
+            profiling_file = None
+            if option_name == "torch":
+                profiling_file = script_dir / f"{model_base_name}_trace_standalone.json"
+            elif option_name == "proton":
+                profiling_file = script_dir / f"{model_base_name}_standalone.hatchet"
+            elif option_name == "nsys":
+                profiling_file = output_dir / f"{model_base_name}_nsys.nsys-rep"
+
+            if profiling_file:
+                file_size = get_file_size(profiling_file)
+                file_sizes[option_name] = file_size
+                if file_size is not None:
+                    print(f"  Profiling file size: {file_size:,} bytes ({file_size / (1024*1024):.2f} MB)")
+                else:
+                    print(f"  Warning: Profiling file not found: {profiling_file}")
+
+    return results, file_sizes
 
 
 def print_table(results: Dict[str, Dict[str, Optional[float]]]):
@@ -283,11 +317,13 @@ def main():
 
     # Run experiments
     all_results = {}
+    all_file_sizes = {}
 
     for model_file in model_files:
         model_name = MODEL_MAPPING.get(model_file, model_file.replace(".py", ""))
-        results = run_model_experiment(model_file, model_runners_dir, output_dir, dry_run=args.dry_run)
+        results, file_sizes = run_model_experiment(model_file, model_runners_dir, output_dir, dry_run=args.dry_run)
         all_results[model_name] = results
+        all_file_sizes[model_name] = file_sizes
 
     # Print results
     print("\n" + "="*60)
@@ -303,6 +339,12 @@ def main():
         with open(results_file, "w") as f:
             json.dump(all_results, f, indent=2)
         print(f"\nResults saved to: {results_file}")
+
+        # Save file sizes to JSON
+        file_sizes_file = output_dir / "experiment_results_size_nv.json"
+        with open(file_sizes_file, "w") as f:
+            json.dump(all_file_sizes, f, indent=2)
+        print(f"File sizes saved to: {file_sizes_file}")
     else:
         print("\nDry run completed - no results to display")
 

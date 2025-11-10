@@ -3,20 +3,89 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from brokenaxes import brokenaxes
+import json
+from pathlib import Path
+import os
 
 # Data
-raw = [
-    ["Llama-3.1-8B", 44.69, 50.89, 55.37, 55.33, 51.54, 53.9, 53.38, 54.56],
-    ["Llama-3.3-70B", 249.96, 426.41, 313.85, 319.96, 272.91, 315.16, 280.67, 292.27],
-    ["Gemma3-4B", 58.05, 75.37, 70.2, 72.54, 59.35, 64.31, 63.48, 64.66],
-    ["Qwen3-30B-A3B", 208.11, 282.77, 272.45, 281.11, 150.0, 187.29, 181.49, 204.91],
-    ["GPT-OSS-20B", 270.93, 515.86, 369.41, 358.96, 157.42, 242.06, 194.0, 205.54],
-    ["Mistral-7B", 44.85, 79.38, 54.67, 57.8, 53.47, 58.42, 55.57, 56.35],
-    ["Phi-3.5-Mini", 38.18, 71.57, 51.54, 55.92, np.nan, np.nan, np.nan, np.nan],
-    ["SmolLM2.1-7B", 33.6, 53.89, 39.88, 41.22, 37.46, 45.45, 38.95, 41.2],
-    ["TinyLlama-Chat", 32.97, 54.89, 39.22, 39.91, 36.42, 44.09, 37.97, 39.52],
-    ["Zephyr-SFT", 46.3, 80.06, 55.83, 59.57, 54.03, 61.27, 55.54, 57.3],
+# Original hardcoded data (commented out)
+# raw = [
+#     ["Llama-3.1-8B", 44.69, 50.89, 55.37, 55.33, 51.54, 53.9, 53.38, 54.56],
+#     ["Llama-3.3-70B", 249.96, 426.41, 313.85, 319.96, 272.91, 315.16, 280.67, 292.27],
+#     ["Gemma3-4B", 58.05, 75.37, 70.2, 72.54, 59.35, 64.31, 63.48, 64.66],
+#     ["Qwen3-30B-A3B", 208.11, 282.77, 272.45, 281.11, 150.0, 187.29, 181.49, 204.91],
+#     ["GPT-OSS-20B", 270.93, 515.86, 369.41, 358.96, 157.42, 242.06, 194.0, 205.54],
+#     ["Mistral-7B", 44.85, 79.38, 54.67, 57.8, 53.47, 58.42, 55.57, 56.35],
+#     ["Phi-3.5-Mini", 38.18, 71.57, 51.54, 55.92, np.nan, np.nan, np.nan, np.nan],
+#     ["SmolLM2.1-7B", 33.6, 53.89, 39.88, 41.22, 37.46, 45.45, 38.95, 41.2],
+#     ["TinyLlama-Chat", 32.97, 54.89, 39.22, 39.91, 36.42, 44.09, 37.97, 39.52],
+#     ["Zephyr-SFT", 46.3, 80.06, 55.83, 59.57, 54.03, 61.27, 55.54, 57.3],
+# ]
+
+# Load data from JSON files
+script_dir = Path(__file__).parent
+nv_json_path = script_dir / "experiment_outputs_nv" / "experiment_results_nv.json"
+amd_json_path = script_dir / "experiment_outputs_amd" / "experiment_results_amd.json"
+
+# Model names in order
+model_names = [
+    "Llama-3.1-8B",
+    "Llama-3.3-70B",
+    "Gemma3-4B",
+    "Qwen3-30B-A3B",
+    "GPT-OSS-20B",
+    "Mistral-7B",
+    "Phi-3.5-Mini",
+    "SmolLM2.1-7B",
+    "TinyLlama-Chat",
+    "Zephyr-SFT",
 ]
+
+# Initialize data structure
+raw = []
+
+# Check which JSON files exist
+has_nv_data = nv_json_path.exists()
+has_amd_data = amd_json_path.exists()
+
+# Load JSON data
+nv_data = {}
+amd_data = {}
+
+if has_nv_data:
+    with open(nv_json_path, "r") as f:
+        nv_data = json.load(f)
+    print(f"Loaded NVIDIA data from {nv_json_path}")
+
+if has_amd_data:
+    with open(amd_json_path, "r") as f:
+        amd_data = json.load(f)
+    print(f"Loaded AMD data from {amd_json_path}")
+
+# Build raw data
+for model_name in model_names:
+    row = [model_name]
+
+    # GH200 data (NVIDIA)
+    if has_nv_data and model_name in nv_data:
+        row.append(nv_data[model_name].get("baseline", np.nan))
+        row.append(nv_data[model_name].get("torch", np.nan))
+        row.append(nv_data[model_name].get("proton", np.nan))
+        row.append(nv_data[model_name].get("nsys", np.nan))
+    else:
+        row.extend([0, 0, 0, 0])
+
+    # MI300 data (AMD)
+    if has_amd_data and model_name in amd_data:
+        row.append(amd_data[model_name].get("baseline", np.nan))
+        row.append(amd_data[model_name].get("torch", np.nan))
+        row.append(amd_data[model_name].get("proton", np.nan))
+        row.append(amd_data[model_name].get("rocprof", np.nan))
+    else:
+        row.extend([0, 0, 0, 0])
+
+    raw.append(row)
+
 cols = [
     "Name",
     "gh200-baseline", "gh200-torch", "gh200-proton", "gh200-nsys",

@@ -116,7 +116,12 @@ def clean_experiment_files():
         "unsloth_training_checkpoints",
         "_unsloth_sentencepiece_temp",
         "gpt_oss_20b_outputs",
-        "llama3_70b_outputs"
+        "llama3_70b_outputs",
+        "mistral_7b_outputs",
+        "phi_3_5_mini_outputs",
+        "tinyllama_chat_outputs",
+        "smollm2_1_7b_outputs",
+        "zephyr_sft_outputs"
     ]
 
     # Remove files matching patterns

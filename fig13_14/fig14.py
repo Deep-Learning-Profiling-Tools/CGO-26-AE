@@ -117,11 +117,11 @@ for model_name in model_names:
         torch_size = amd_data[model_name].get("torch")
         rocprof_size = amd_data[model_name].get("rocprof")
 
-        row.append(bytes_to_human_readable(proton_size) if proton_size else "out-of-resources")
-        row.append(bytes_to_human_readable(torch_size) if torch_size else "out-of-resources")
-        row.append(bytes_to_human_readable(rocprof_size) if rocprof_size else "out-of-resources")
+        row.append(bytes_to_human_readable(proton_size) if proton_size else "0")
+        row.append(bytes_to_human_readable(torch_size) if torch_size else "0")
+        row.append(bytes_to_human_readable(rocprof_size) if rocprof_size else "0")
     else:
-        row.extend(["out-of-resources", "out-of-resources", "out-of-resources"])
+        row.extend(["0", "0", "0"])
 
     raw.append(row)
 

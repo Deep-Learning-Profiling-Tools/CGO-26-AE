@@ -265,7 +265,7 @@ def main():
     # Setup paths
     script_dir = Path(__file__).parent
     model_runners_dir = script_dir / "model_runners"
-    output_dir = script_dir / "experiment_outputs"
+    output_dir = script_dir / "experiment_outputs_nv"
 
     # Create output directory
     output_dir.mkdir(exist_ok=True)
@@ -299,7 +299,7 @@ def main():
         generate_python_dict(all_results)
 
         # Save results to JSON
-        results_file = output_dir / "experiment_results.json"
+        results_file = output_dir / "experiment_results_nv.json"
         with open(results_file, "w") as f:
             json.dump(all_results, f, indent=2)
         print(f"\nResults saved to: {results_file}")

@@ -132,7 +132,7 @@ def create_trainer(model, tokenizer, train_dataset):
             
             # Training steps
             warmup_steps=5,
-            max_steps=30,  # Increase for longer training
+            max_steps=5,  # Increase for longer training
             
             # Learning rate and optimizer
             learning_rate=2e-4,
@@ -235,8 +235,8 @@ def main():
     parser.add_argument(
         "--max-steps",
         type=int,
-        default=30,
-        help="Maximum number of training steps (default: 30)"
+        default=5,
+        help="Maximum number of training steps (default: 5)"
     )
     parser.add_argument(
         "--batch-size",
@@ -279,7 +279,7 @@ def main():
     trainer = create_trainer(model, tokenizer, train_dataset)
     
     # Override max_steps if specified
-    if args.max_steps != 30:
+    if args.max_steps != 5:
         trainer.args.max_steps = args.max_steps
     if args.batch_size != 2:
         trainer.args.per_device_train_batch_size = args.batch_size

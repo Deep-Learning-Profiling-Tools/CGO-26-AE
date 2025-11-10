@@ -30,6 +30,21 @@ MODEL_MAPPING = {
     "zephyr_sft.py": "Zephyr-SFT"
 }
 
+# Mapping from model file base name to profiling file prefix
+# (because the profiling files use a different naming convention)
+PROFILING_FILE_MAPPING = {
+    "llama3_1_8b": "llama3_1_8b",
+    "llama3_70b_bnb_4bit": "llama3_70b",
+    "gemma3_4b": "gemma3_4b",
+    "qwen3_30b_a3b": "qwen3_30b_a3b",
+    "gpt_oss_20b": "gpt_oss_20b",
+    "mistral_7b_instruct": "mistral_7b",
+    "phi_3_5_mini_instruct": "phi_3_5_mini",
+    "smollm2_1_7b_instruct": "smollm2_1_7b",
+    "tinyllama_chat": "tinyllama",
+    "zephyr_sft": "zephyr_sft"
+}
+
 # Profiling options
 PROFILING_OPTIONS = [
     ("baseline", []),
@@ -210,11 +225,14 @@ def run_model_experiment(model_file: str, model_runners_dir: Path, output_dir: P
 
         # Measure profiling file size
         if not dry_run and option_name in ["torch", "proton", "nsys"]:
+            # Get the profiling file prefix (may differ from model_base_name)
+            profiling_prefix = PROFILING_FILE_MAPPING.get(model_base_name, model_base_name)
+
             profiling_file = None
             if option_name == "torch":
-                profiling_file = script_dir / f"{model_base_name}_trace_standalone.json"
+                profiling_file = script_dir / f"{profiling_prefix}_trace_standalone.json"
             elif option_name == "proton":
-                profiling_file = script_dir / f"{model_base_name}_standalone.hatchet"
+                profiling_file = script_dir / f"{profiling_prefix}_standalone.hatchet"
             elif option_name == "nsys":
                 profiling_file = output_dir / f"{model_base_name}_nsys.nsys-rep"
 

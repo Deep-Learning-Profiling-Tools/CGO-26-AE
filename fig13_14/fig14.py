@@ -8,20 +8,123 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+import json
+from pathlib import Path
 
 # 1) Raw data (paste your table here)
-raw = [
-    ["Llama-3.1-8B","160K","1.10G","57.0M","132K","518M","318M"],
-    ["Llama-3.3-70B","176K","19.0G","313M","136K","18.0G","1.90G"],
-    ["Gemma3-4B","272K","1.30G","65.0M","232K","521M","408M"],
-    ["Qwen3-30B-A3B","224K","9.80G","375M","164K","659M","3.50G"],
-    ["GPT-OSS-20B","400K","41.0G","529M","220K","26.0G","5.80G"],
-    ["Mistral-7B","160K","3.70G","58.0M","176K","3.40G","326M"],
-    ["Phi-3.5-Mini","120K","5.00G","66.0M","out-of-resources","out-of-resources","out-of-resources"],
-    ["SmolLM2.1-7B","160K","2.50G","38.0M","156K","2.50G","232M"],
-    ["TinyLlama-Chat","160K","2.50G","37.0M","160K","2.50G","224M"],
-    ["Zephyr-SFT","164K","3.70G","58.0M","168K","3.40G","327M"],
+# Original hardcoded data (commented out)
+# raw = [
+#     ["Llama-3.1-8B","160K","1.10G","57.0M","132K","518M","318M"],
+#     ["Llama-3.3-70B","176K","19.0G","313M","136K","18.0G","1.90G"],
+#     ["Gemma3-4B","272K","1.30G","65.0M","232K","521M","408M"],
+#     ["Qwen3-30B-A3B","224K","9.80G","375M","164K","659M","3.50G"],
+#     ["GPT-OSS-20B","400K","41.0G","529M","220K","26.0G","5.80G"],
+#     ["Mistral-7B","160K","3.70G","58.0M","176K","3.40G","326M"],
+#     ["Phi-3.5-Mini","120K","5.00G","66.0M","out-of-resources","out-of-resources","out-of-resources"],
+#     ["SmolLM2.1-7B","160K","2.50G","38.0M","156K","2.50G","232M"],
+#     ["TinyLlama-Chat","160K","2.50G","37.0M","160K","2.50G","224M"],
+#     ["Zephyr-SFT","164K","3.70G","58.0M","168K","3.40G","327M"],
+# ]
+
+# Load data from JSON files
+script_dir = Path(__file__).parent
+nv_json_path = script_dir / "experiment_outputs_nv" / "experiment_results_size_nv.json"
+amd_json_path = script_dir / "experiment_outputs_amd" / "experiment_results_size_amd.json"
+
+# Model names in order
+model_names = [
+    "Llama-3.1-8B",
+    "Llama-3.3-70B",
+    "Gemma3-4B",
+    "Qwen3-30B-A3B",
+    "GPT-OSS-20B",
+    "Mistral-7B",
+    "Phi-3.5-Mini",
+    "SmolLM2.1-7B",
+    "TinyLlama-Chat",
+    "Zephyr-SFT",
 ]
+
+def bytes_to_human_readable(bytes_val):
+    """Convert bytes to human readable format (K/M/G)"""
+    if bytes_val is None or bytes_val == 0:
+        return "0"
+
+    # Determine the appropriate unit
+    if bytes_val < 1024 * 1024:  # Less than 1 MB
+        value = bytes_val / 1024
+        if value < 10:
+            return f"{value:.2f}K"
+        elif value < 100:
+            return f"{value:.1f}K"
+        else:
+            return f"{int(round(value))}K"
+    elif bytes_val < 1024 * 1024 * 1024:  # Less than 1 GB
+        value = bytes_val / (1024 * 1024)
+        if value < 10:
+            return f"{value:.2f}M"
+        elif value < 100:
+            return f"{value:.1f}M"
+        else:
+            return f"{int(round(value))}M"
+    else:  # GB or larger
+        value = bytes_val / (1024 * 1024 * 1024)
+        if value < 10:
+            return f"{value:.2f}G"
+        elif value < 100:
+            return f"{value:.1f}G"
+        else:
+            return f"{int(round(value))}G"
+
+# Check which JSON files exist
+has_nv_data = nv_json_path.exists()
+has_amd_data = amd_json_path.exists()
+
+# Load JSON data
+nv_data = {}
+amd_data = {}
+
+if has_nv_data:
+    with open(nv_json_path, "r") as f:
+        nv_data = json.load(f)
+    print(f"Loaded NVIDIA data from {nv_json_path}")
+
+if has_amd_data:
+    with open(amd_json_path, "r") as f:
+        amd_data = json.load(f)
+    print(f"Loaded AMD data from {amd_json_path}")
+
+# Build raw data
+raw = []
+for model_name in model_names:
+    row = [model_name]
+
+    # GH200 data (NVIDIA) - proton, torch, nsys
+    if has_nv_data and model_name in nv_data:
+        proton_size = nv_data[model_name].get("proton")
+        torch_size = nv_data[model_name].get("torch")
+        nsys_size = nv_data[model_name].get("nsys")
+
+        row.append(bytes_to_human_readable(proton_size) if proton_size else "0")
+        row.append(bytes_to_human_readable(torch_size) if torch_size else "0")
+        row.append(bytes_to_human_readable(nsys_size) if nsys_size else "0")
+    else:
+        row.extend(["0", "0", "0"])
+
+    # MI300 data (AMD) - proton, torch, rocprof
+    if has_amd_data and model_name in amd_data:
+        proton_size = amd_data[model_name].get("proton")
+        torch_size = amd_data[model_name].get("torch")
+        rocprof_size = amd_data[model_name].get("rocprof")
+
+        row.append(bytes_to_human_readable(proton_size) if proton_size else "out-of-resources")
+        row.append(bytes_to_human_readable(torch_size) if torch_size else "out-of-resources")
+        row.append(bytes_to_human_readable(rocprof_size) if rocprof_size else "out-of-resources")
+    else:
+        row.extend(["out-of-resources", "out-of-resources", "out-of-resources"])
+
+    raw.append(row)
+
 cols = ["Name","TritonProf-GH200","TorchProf-GH200","nsys-GH200",
         "TritonProf-MI300X","TorchProf-MI300X","rocprof-MI300X"]
 df_raw = pd.DataFrame(raw, columns=cols).set_index("Name")

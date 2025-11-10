@@ -15,6 +15,7 @@ import argparse
 import shutil
 import glob
 import time
+from datetime import datetime
 
 # Model names mapping (file -> display name)
 MODEL_MAPPING = {
@@ -165,8 +166,9 @@ def run_model_experiment(model_file: str, model_runners_dir: Path, output_dir: P
     """Run all experiments for a single model and measure profiling file sizes."""
     model_name = MODEL_MAPPING.get(model_file, model_file.replace(".py", ""))
     model_base_name = model_file.replace('.py', '')
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"\n{'='*60}")
-    print(f"Running experiments for {model_name}")
+    print(f"[{timestamp}] Running experiments for {model_name}")
     print(f"{'='*60}")
 
     model_path = model_runners_dir / model_file
@@ -176,13 +178,15 @@ def run_model_experiment(model_file: str, model_runners_dir: Path, output_dir: P
     script_dir = output_dir.parent
 
     # Warmup run
-    print("\n[Warmup run]")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\n[{timestamp}] [Warmup run]")
     warmup_log = output_dir / f"{model_base_name}_warmup.log"
     run_command(["python", str(model_path)], str(warmup_log), dry_run=dry_run)
 
     # Run each profiling option
     for option_name, option_args in PROFILING_OPTIONS:
-        print(f"\n[Running with {option_name}]")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"\n[{timestamp}] [Running with {option_name}]")
 
         output_file = output_dir / f"{model_base_name}_{option_name}.log"
 

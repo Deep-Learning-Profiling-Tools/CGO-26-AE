@@ -111,7 +111,7 @@ def clean_experiment_files():
 
     # Directories to remove
     directories = [
-        "experiment_outputs",
+        "experiment_outputs_nv",
         "unsloth_compiled_cache",
         "unsloth_training_checkpoints",
         "_unsloth_sentencepiece_temp",

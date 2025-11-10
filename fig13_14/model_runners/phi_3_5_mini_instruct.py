@@ -213,10 +213,11 @@ def train_with_profiling(trainer, profiling_mode="none", model_name="phi_3_5_min
         trace_file = f"phi_3_5_mini_trace_{model_name}.json"
         prof.export_chrome_trace(trace_file)
         print(f"PyTorch profile saved as {trace_file}")
-        
+
         # Print memory usage summary
-        print("\nTop 10 memory consuming operations:")
-        print(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
+        # Note: Commented out to speed up profiling - only generate JSON trace
+        # print("\nTop 10 memory consuming operations:")
+        # print(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
         
     else:
         # Standard training without profiling

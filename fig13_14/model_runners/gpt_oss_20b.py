@@ -215,10 +215,11 @@ def train_with_profiling(trainer, profiling_mode="none", model_name="gpt_oss_20b
         trace_file = f"gpt_oss_20b_trace_{model_name}.json"
         prof.export_chrome_trace(trace_file)
         print(f"PyTorch profile saved as {trace_file}")
-        
+
         # Print memory usage summary
-        print("\nTop 10 memory consuming operations:")
-        print(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
+        # Note: Commented out to speed up profiling - only generate JSON trace
+        # print("\nTop 10 memory consuming operations:")
+        # print(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
         
     else:
         # Standard training without profiling

@@ -22,3 +22,7 @@ override-dependencies = [
     "xformers; sys_platform == 'never'",
     "pytorch-triton-rocm; sys_platform == 'never'",
 ]
+
+
+[tool.uv.sources]
+triton = { path = "../../submodules/triton" }

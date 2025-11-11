@@ -33,7 +33,7 @@ UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync --extra rocm
 
 
 1. `cd fig13_14`
-2. Start experiments by `python run_experiment_amd.py`. The results will be both displayed in terminal and stored in a json file.
+2. Start experiments by `python run_experiment_nv.py` if on NVIDIA or `python run_experiment_amd.py` if on AMD. The results will be both displayed in terminal and stored in a json file.
 3. Plot Figure 13 by `python fig13.py`. The script will automatically read json file and plot AMD part of the figure.
 4. Plot Figure 14 by `python fig14.py`.
 

@@ -21,7 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 cuda = [
-    "torch==2.9.0+cu130",
+    "torch==2.9.0+cu128",
     "torchvision"
 ]
 rocm = [
@@ -47,11 +47,11 @@ conflicts = [
 triton = { path = "./submodules/triton", editable=true}
 triton_kernels = { path = "./submodules/triton/python/triton_kernels", editable=true}
 torch = [ 
-    { index = "pytorch-cu130", extra = "cuda"},
+    { index = "pytorch", extra = "cuda"},
     { url =  "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"},
 ]
 torchvision = [
-    { index = "pytorch-cu130", extra = "cuda" },
+    { index = "pytorch", extra = "cuda" },
     { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"}
 ]
 bitsandbytes = [
@@ -59,7 +59,7 @@ bitsandbytes = [
 ]
 
 [[tool.uv.index]]
-name = "pytorch-cu130"
-url = "https://download.pytorch.org/whl/cu130"
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"
 explicit = true
 

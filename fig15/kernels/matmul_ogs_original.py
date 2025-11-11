@@ -16,59 +16,25 @@ from utils import (
     set_profile_enabled,
 )
 
-import triton_kernels 
+# matmul utilities
+import triton_kernels.matmul_ogs_details.opt_flags as opt_flags
+from triton_kernels.matmul_ogs import FlexCtx, PrecisionConfig, FusedActivation, FnSpecs, FnName, Epilogue
+from triton_kernels.matmul_ogs import matmul_ogs_set_idle_sms, matmul_ogs, matmul_ogs_torch
+from triton_kernels.swiglu import swiglu, swiglu_fn, PrecisionConfig as SwiGLUPrecisionConfig
+from triton_kernels.tensor import convert_layout, wrap_torch_tensor, FP4
+from triton_kernels.tensor_details import layout
+import triton_kernels.distributed.routing as routing
+# numerics utilities
+from triton_kernels.numerics import InFlexData, OutFlexData
+from triton_kernels.numerics_details.mxfp import downcast_to_mxfp, upcast_from_mxfp, quantize_mxfp8_fn, downcast_to_mxfp_torch, upcast_from_mxfp_torch, MXFP_BLOCK_SIZE
+# testing utilities
+from triton_kernels.testing import assert_close, compute_actual_scale
+# target-specific utilities
+from triton_kernels.target_info import is_hip, is_hip_cdna3, is_cuda, is_hip_cdna4
+
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
-
-# routing utilities
-routing = triton_kernels.routing.routing
-# matmul utilities
-opt_flags = triton_kernels.matmul_ogs_details.opt_flags
-FlexCtx = triton_kernels.matmul_ogs.FlexCtx
-PrecisionConfig = triton_kernels.matmul_ogs.PrecisionConfig
-FusedActivation = triton_kernels.matmul_ogs.FusedActivation
-FnSpecs = triton_kernels.matmul_ogs.FnSpecs
-FnName = triton_kernels.matmul_ogs.FnName
-Epilogue = triton_kernels.matmul_ogs.Epilogue
-matmul_ogs_set_idle_sms = triton_kernels.matmul_ogs.matmul_ogs_set_idle_sms
-matmul_ogs = triton_kernels.matmul_ogs.matmul_ogs
-matmul_ogs_torch = triton_kernels.matmul_ogs.matmul_ogs_torch
-swiglu = triton_kernels.swiglu.swiglu
-swiglu_fn = triton_kernels.swiglu.swiglu_fn
-SwiGLUPrecisionConfig = triton_kernels.swiglu.PrecisionConfig
-convert_layout = triton_kernels.tensor.convert_layout
-wrap_torch_tensor = triton_kernels.tensor.wrap_torch_tensor
-FP4 = triton_kernels.tensor.FP4
-layout = triton_kernels.tensor_details.layout
-# numerics utilities
-InFlexData = triton_kernels.numerics.InFlexData
-OutFlexData = triton_kernels.numerics.OutFlexData
-downcast_to_mxfp = triton_kernels.numerics_details.mxfp.downcast_to_mxfp
-upcast_from_mxfp = triton_kernels.numerics_details.mxfp.upcast_from_mxfp
-# quantize_mxfp8_fn = triton_kernels.numerics_details.mxfp.quantize_mxfp8_fn  # Function not available in current version
-quantize_mxfp8_fn = None  # Will be set when needed
-downcast_to_mxfp_torch = triton_kernels.numerics_details.mxfp.downcast_to_mxfp_torch
-upcast_from_mxfp_torch = triton_kernels.numerics_details.mxfp.upcast_from_mxfp_torch
-MXFP_BLOCK_SIZE = triton_kernels.numerics_details.mxfp.MXFP_BLOCK_SIZE
-# testing utilities
-# assert_close = triton_kernels.testing.assert_close
-# compute_actual_scale = triton_kernels.testing.compute_actual_scale
-# Use torch.testing instead as triton_kernels.testing is not available
-def assert_close(a, b, maxtol=None, rmstol=None):
-    """Simple assert_close implementation using torch.testing"""
-    if maxtol is not None and rmstol is not None:
-        torch.testing.assert_close(a, b, atol=maxtol, rtol=rmstol)
-    else:
-        torch.testing.assert_close(a, b, rtol=1e-3, atol=1e-3)
-
-def compute_actual_scale(tensor, dtype):
-    """Compute actual scale for a tensor"""
-    return tensor.abs().max()
 # target-specific utilities
-is_hip = triton_kernels.target_info.is_hip
-is_hip_cdna3 = triton_kernels.target_info.is_hip_cdna3
-is_cuda = triton_kernels.target_info.is_cuda
-is_hip_cdna4 = triton_kernels.target_info.is_hip_cdna4
 
 CUPTI_KERNEL_PATTERN = r"matmul_ogs"
 

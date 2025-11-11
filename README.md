@@ -4,23 +4,30 @@
 
 ## Init Git Submodules
 
+```bash
+git submodule init
+git submodule update
+```
+
 ## Install uv
 
-## Install NV Env
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-cd uv_env/nv
+## Install NV Env if you are on GH200
 
-uv sync
+```bash
+uv sync --extra cuda
+. .venv/bin/activate
+```
 
-source .venv/bin/activate
+## Install AMD Env if you are on MI300X
 
-## Install AMD Env
-
-cd uv_env/amd
-
-UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync
-
-source .venv/bin/activate
+```bash
+UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync --extra rocm
+. .venv/bin/activate
+```
 
 # Figure 13 and Figure 14
 

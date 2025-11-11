@@ -13,7 +13,7 @@ from .target_info import is_hip, is_cuda
 MACHINE_UPPER_BOUNDS = {
     "gh200": {
         "display": "GH200 upper bound",
-        "tbps": 3.35,
+        "tbps": 4.0,
         "tflops": {
             "fp16": 1979,
             "bf16": 1979,
@@ -337,6 +337,7 @@ def plot_roofline(series, flops_dtype, out_path, max_tbps="memset", max_tflops="
                 label=f"Compute-bound - {max_tflops:.0f} TFLOP/s [cuBLAS]")
 
     machine_bounds = get_machine_upper_bounds_for_dtype(flops_dtype)
+    yaxis_roof = max_tflops
     if machine_bounds:
         theoretical_segments = build_roofline_segments(machine_bounds["tbps"], machine_bounds["tflops"])
         bw_label = f"{machine_bounds['label']} BW - {machine_bounds['tbps']:.1f} TB/s"
@@ -347,6 +348,7 @@ def plot_roofline(series, flops_dtype, out_path, max_tbps="memset", max_tflops="
         if theoretical_segments["comp_x"]:
             ax.plot(theoretical_segments["comp_x"], theoretical_segments["comp_y"], ls=":", color=grey, alpha=0.8,
                     label=comp_label)
+        yaxis_roof = max(yaxis_roof, machine_bounds["tflops"])
 
     # Series
     for lab, perf in zip(series_labels, series_perf):
@@ -356,7 +358,9 @@ def plot_roofline(series, flops_dtype, out_path, max_tbps="memset", max_tflops="
     xmin, xmax = xs[0], xs[-1]
     dx = 0.05 * (xmax - xmin) if xmax > xmin else 1.0
     ax.set_xlim(xmin - dx, xmax + dx)
-    ax.set_ylim(min(min(perf) for perf in series_perf) * 0.8 if series_perf else 0.0, max_tflops * 1.05)
+    ymax = yaxis_roof * 1.05 if yaxis_roof > 0 else 1.0
+    ymin = min(min(perf) for perf in series_perf) * 0.8 if series_perf else 0.0
+    ax.set_ylim(ymin, ymax)
 
     # Points of interest
     if points_of_interest:

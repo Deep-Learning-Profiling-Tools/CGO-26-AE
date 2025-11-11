@@ -16,12 +16,9 @@ from utils import (
     set_profile_enabled,
 )
 
+import triton_kernels 
 # Enable semantic for TTGIR override
 pl.enable_semantic("triton")
-
-# Load triton_kernels from Hugging Face Hub
-from kernels import get_kernel
-triton_kernels = get_kernel("kernels-community/triton_kernels")
 
 # routing utilities
 routing = triton_kernels.routing.routing

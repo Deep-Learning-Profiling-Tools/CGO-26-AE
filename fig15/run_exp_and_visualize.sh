@@ -1,5 +1,17 @@
+# Detect GPU platform and set output CSV filename
+if nvidia-smi &> /dev/null; then
+    export CUPTI_TIMING_CSV_FILENAME="cupti_profile_timings_nv.csv"
+    echo "Detected NVIDIA GPU, output will be saved to cupti_profile_timings_nv.csv"
+elif rocm-smi &> /dev/null; then
+    export CUPTI_TIMING_CSV_FILENAME="cupti_profile_timings_amd.csv"
+    echo "Detected AMD GPU, output will be saved to cupti_profile_timings_amd.csv"
+else
+    export CUPTI_TIMING_CSV_FILENAME="cupti_profile_timings.csv"
+    echo "GPU type unknown, output will be saved to cupti_profile_timings.csv"
+fi
+
 # run intra-kernel profiling
-(   
+(
     # make shell output verbose
     set -x
     DUMP_DIR="$(pwd)/ttgir_dump"

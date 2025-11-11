@@ -11,7 +11,9 @@ import torch
 _CUDA_EVENT_CSV_PATH = Path(__file__).with_name("cuda_event_timings.csv")
 _CUDA_EVENT_CSV_LOCK = Lock()
 _PROFILE_ENABLED = False
-_CUPTI_TIMING_CSV_PATH = Path(__file__).with_name("cupti_profile_timings.csv")
+# Support platform-specific CSV output via environment variable
+_CUPTI_CSV_FILENAME = os.environ.get("CUPTI_TIMING_CSV_FILENAME", "cupti_profile_timings.csv")
+_CUPTI_TIMING_CSV_PATH = Path(__file__).with_name(_CUPTI_CSV_FILENAME)
 _CUPTI_TIMING_CSV_LOCK = Lock()
 
 

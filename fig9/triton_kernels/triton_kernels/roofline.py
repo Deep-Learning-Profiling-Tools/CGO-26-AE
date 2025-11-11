@@ -15,18 +15,18 @@ MACHINE_UPPER_BOUNDS = {
         "display": "GH200 upper bound",
         "tbps": 4.0,
         "tflops": {
-            "fp16": 1979,
-            "bf16": 1979,
-            "fp8": 3958,
+            "fp16": 989,
+            "bf16": 989,
+            "fp8": 1979,
         },
     },
     "h100": {
         "display": "H100 upper bound",
         "tbps": 3.35,
         "tflops": {
-            "fp16": 1979,
-            "bf16": 1979,
-            "fp8": 3958,
+            "fp16": 989,
+            "bf16": 989,
+            "fp8": 1979,
         },
     },
     "mi300x": {

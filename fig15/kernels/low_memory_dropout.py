@@ -9,7 +9,6 @@ from pathlib import Path
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -67,7 +66,7 @@ def instrumented_seeded_dropout_kernel(
     pl.exit_scope("kernel_start")
 
 
-def instrumented_seeded_dropout(x, p, seed, use_cuda_event: bool = False):
+def instrumented_seeded_dropout(x, p, seed):
     """Wrapper function for instrumented seeded dropout."""
     output = torch.empty_like(x)
     assert x.is_contiguous(), "Input tensor must be contiguous"
@@ -76,18 +75,7 @@ def instrumented_seeded_dropout(x, p, seed, use_cuda_event: bool = False):
     grid = lambda meta: (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
     
     # Launch kernel
-    if use_cuda_event:
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        torch.cuda._sleep(1_000_000)
-        start_event.record()
     instrumented_seeded_dropout_kernel[grid](x, output, n_elements, p, seed, BLOCK_SIZE=1024)
-    if use_cuda_event:
-        end_event.record()
-        torch.cuda.synchronize()
-        elapsed_time = start_event.elapsed_time(end_event)
-        log_cuda_event_time("seeded_dropout", elapsed_time)
-        print(f"Outside seeded dropout elapsed time by cuda event: {elapsed_time} ms")
     return output
 
 
@@ -145,7 +133,7 @@ def instrumented_dropout(x, x_keep, p):
     return output
 
 
-def benchmark_instrumented_dropout(n_elements, p=0.5, seed=123, device="cuda", dropout_type="seeded", use_cuda_event: bool = False):
+def benchmark_instrumented_dropout(n_elements, p=0.5, seed=123, device="cuda", dropout_type="seeded"):
     """Benchmark instrumented dropout kernels with cycle measurement."""
     x = torch.randn(size=(n_elements,), device=device, dtype=torch.float32)
     
@@ -155,7 +143,7 @@ def benchmark_instrumented_dropout(n_elements, p=0.5, seed=123, device="cuda", d
             for _ in range(5):
                 _ = instrumented_seeded_dropout(x, p, seed)
             # Actual benchmark
-            result = instrumented_seeded_dropout(x, p, seed, use_cuda_event=use_cuda_event)
+            result = instrumented_seeded_dropout(x, p, seed)
 
     else:
         # Traditional dropout with explicit mask
@@ -192,7 +180,6 @@ if __name__ == "__main__":
                         help="Type of dropout to benchmark")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -221,9 +208,7 @@ if __name__ == "__main__":
         )
         sessions.append(instrument_session)
 
-    result = benchmark_instrumented_dropout(
-        n_elements, p, seed, dropout_type=dropout_type, use_cuda_event=args.use_cuda_event if args.instrument else True
-    )
+    result = benchmark_instrumented_dropout(n_elements, p, seed, dropout_type=dropout_type)
 
     for session in reversed(sessions):
         proton.finalize(session)

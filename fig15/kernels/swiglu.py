@@ -10,7 +10,6 @@ from pathlib import Path
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -88,7 +87,7 @@ def swiglu_kernel(
     pl.exit_scope("kernel_start")
 
 
-def swiglu(x, beta=1.0, use_cuda_event: bool = False):
+def swiglu(x, beta=1.0):
     """
     SwiGLU activation function
     
@@ -111,12 +110,6 @@ def swiglu(x, beta=1.0, use_cuda_event: bool = False):
     def grid(META):
         return (triton.cdiv(M, META['BLOCK_SIZE_M']), triton.cdiv(N, META['BLOCK_SIZE_N']))
     
-    if use_cuda_event:
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        torch.cuda._sleep(1_000_000)
-        start_event.record()
-    
     swiglu_kernel[grid](
         x, output,
         M, N,
@@ -126,26 +119,19 @@ def swiglu(x, beta=1.0, use_cuda_event: bool = False):
         BLOCK_SIZE_M=64,
         BLOCK_SIZE_N=64,
     )
-    if use_cuda_event:
-        end_event.record()
-        torch.cuda.synchronize()
-        elapsed_time = start_event.elapsed_time(end_event)
-        log_cuda_event_time("swiglu", elapsed_time)
-        print(f"Outside swiglu elapsed time by cuda event: {elapsed_time} ms")
-    
     return output
 
 
-def benchmark_swiglu(M, N, beta=1.0, use_cuda_event: bool = False):
+def benchmark_swiglu(M, N, beta=1.0):
     """Benchmark SwiGLU with specified parameters"""
     # Create input tensor: [gate_proj, up_proj] concatenated
     x = torch.randn((M, 2 * N), device=DEVICE, dtype=torch.float16)
     # warm up
     for _ in range(5):
-        _ = swiglu(x, beta, use_cuda_event=False) # always disable cuda event for warm up
+        _ = swiglu(x, beta)
 
     # Run SwiGLU
-    output_triton = swiglu(x, beta, use_cuda_event=use_cuda_event)
+    output_triton = swiglu(x, beta)
     
     # Verify with PyTorch implementation
     gate_proj = x[:, :N]
@@ -172,7 +158,6 @@ if __name__ == "__main__":
     parser.add_argument("--beta", type=float, default=1.0, help="SwiGLU beta parameter")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
     
@@ -197,9 +182,7 @@ if __name__ == "__main__":
         )
         sessions.append(instrument_session)
 
-    result = benchmark_swiglu(
-        M, N, beta, use_cuda_event=args.use_cuda_event if args.instrument else True
-    )
+    result = benchmark_swiglu(M, N, beta)
 
     for session in reversed(sessions):
         proton.finalize(session)

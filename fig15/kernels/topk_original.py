@@ -7,7 +7,6 @@ from pathlib import Path
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -181,7 +180,7 @@ def _topk_forward(X, stride_xm,  # inputs
     pl.exit_scope("output_phase")
 
 
-def benchmark_topk_original(M, N_experts, K, use_cuda_event: bool = False):
+def benchmark_topk_original(M, N_experts, K):
     """Simple benchmark function for original topk kernel"""
     import torch
     
@@ -220,11 +219,6 @@ def benchmark_topk_original(M, N_experts, K, use_cuda_event: bool = False):
                 K,  # N_EXPTS_ACT
                 128,  # BLOCK_N
             )
-        if use_cuda_event:
-            start_event = torch.cuda.Event(enable_timing=True)
-            end_event = torch.cuda.Event(enable_timing=True)
-            torch.cuda._sleep(1_000_000)
-            start_event.record()
         _topk_forward[(1,)](
                 X, X.stride(0),
                 Yv, Yi, Yv.stride(0),
@@ -238,12 +232,6 @@ def benchmark_topk_original(M, N_experts, K, use_cuda_event: bool = False):
                 K,  # N_EXPTS_ACT
                 128,  # BLOCK_N
             )
-        if use_cuda_event:
-            end_event.record()
-            torch.cuda.synchronize()
-            elapsed_time = start_event.elapsed_time(end_event)
-            log_cuda_event_time("topk", elapsed_time)
-            print(f"Outside topk elapsed time by cuda event: {elapsed_time} ms")
 
         print("TopK kernel executed successfully")
         return Yv, Yi
@@ -263,7 +251,6 @@ if __name__ == "__main__":
     parser.add_argument("--K", type=int, default=16, help="Top-K value")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -289,9 +276,7 @@ if __name__ == "__main__":
         )
         sessions.append(instrument_session)
 
-    values, indices = benchmark_topk_original(
-        M, N, K, use_cuda_event=args.use_cuda_event if args.instrument else True
-    )
+    values, indices = benchmark_topk_original(M, N, K)
 
     for session in reversed(sessions):
         proton.finalize(session)

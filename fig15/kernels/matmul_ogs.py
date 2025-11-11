@@ -22,7 +22,6 @@ import triton_kernels.matmul_ogs_details.opt_flags as opt_flags
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -192,13 +191,7 @@ def _run_matmul_ogs(
     gather_indx: GatherIndx,
     scatter_indx: ScatterIndx,
     precision_config: PrecisionConfig,
-    use_cuda_event: bool,
 ):
-    if use_cuda_event:
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        torch.cuda._sleep(1_000_000)
-        start_event.record()
     result = matmul_ogs(
         x,
         w,
@@ -208,13 +201,7 @@ def _run_matmul_ogs(
         scatter_indx=scatter_indx,
         precision_config=precision_config,
     )
-    if use_cuda_event:
-        end_event.record()
     torch.cuda.synchronize()
-    if use_cuda_event:
-        elapsed_ms = start_event.elapsed_time(end_event)
-        log_cuda_event_time("matmul_ogs", elapsed_ms)
-        print(f"Outside matmul_ogs elapsed time by cuda event: {elapsed_ms:.6f} ms")
     return result
 
 
@@ -226,7 +213,6 @@ def benchmark_matmul_ogs(
     n_expts_act: int,
     *,
     device: torch.device = torch.device(DEVICE),
-    use_cuda_event: bool = False,
 ):
     (
         x,
@@ -274,7 +260,6 @@ def benchmark_matmul_ogs(
                 gather_indx,
                 scatter_indx,
                 precision_config,
-                use_cuda_event=use_cuda_event,
             )
     finally:
         opt_flags.reset_opt_flags_constraints()
@@ -306,11 +291,6 @@ def main():
         type=int,
         default=512,
         help="Instrumentation backend buffer size",
-    )
-    parser.add_argument(
-        "--use-cuda-event",
-        action="store_true",
-        help="Record CUDA event timing for the profiled run",
     )
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -346,7 +326,6 @@ def main():
             args.k,
             args.n_experts,
             args.n_active,
-            use_cuda_event=args.use_cuda_event if args.instrument else True,
         )
     finally:
         for session in reversed(sessions):

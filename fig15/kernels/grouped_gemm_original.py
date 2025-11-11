@@ -38,7 +38,6 @@ from triton.profiler.mode import Default
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -152,7 +151,7 @@ def grouped_matmul_kernel(
     pl.exit_scope("kernel_start")
 
 
-def group_gemm_fn(group_A, group_B, use_cuda_event: bool = False):
+def group_gemm_fn(group_A, group_B):
     assert len(group_A) == len(group_B)
     group_size = len(group_A)
 
@@ -185,12 +184,6 @@ def group_gemm_fn(group_A, group_B, use_cuda_event: bool = False):
     # we use a fixed number of CTA, and it's auto-tunable
     grid = lambda META: (META["NUM_SM"],)
 
-    if use_cuda_event:
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        torch.cuda._sleep(1_000_000)
-        start_event.record()
-
     grouped_matmul_kernel[grid](
         d_a_ptrs,
         d_b_ptrs,
@@ -204,13 +197,7 @@ def group_gemm_fn(group_A, group_B, use_cuda_event: bool = False):
         NUM_SM=num_sms(),
     )
 
-    if use_cuda_event:
-        end_event.record()
-        torch.cuda.synchronize()
-        elapsed_time = start_event.elapsed_time(end_event)
-        log_cuda_event_time("grouped_gemm", elapsed_time)
-        print(f"Outside grouped GEMM elapsed time by cuda event: {elapsed_time} ms")
-
+    torch.cuda.synchronize()
     return group_C
 
 
@@ -623,7 +610,7 @@ def benchmark_batches(M, provider):
     return ms, max_ms, min_ms
 
 
-def simple_grouped_gemm_test(use_cuda_event: bool = False):
+def simple_grouped_gemm_test():
     """Simple test function for profiling grouped GEMM"""
     group_size = 4
     M, N, K = 6144, 6144, 6144
@@ -643,7 +630,7 @@ def simple_grouped_gemm_test(use_cuda_event: bool = False):
         _ = group_gemm_fn(group_A, group_B)
 
     # Run grouped GEMM
-    group_C = group_gemm_fn(group_A, group_B, use_cuda_event)
+    group_C = group_gemm_fn(group_A, group_B)
 
     # Verify one result
     C_torch = torch.matmul(group_A[0], group_B[0])
@@ -670,7 +657,6 @@ if __name__ == "__main__":
         help="data to collect with Proton instrumentation backend",
     )
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -697,9 +683,7 @@ if __name__ == "__main__":
             )
             sessions.append(instrument_session)
 
-        result = simple_grouped_gemm_test(
-            use_cuda_event=args.use_cuda_event if args.instrument else True
-        )
+        result = simple_grouped_gemm_test()
 
         for session in reversed(sessions):
             proton.finalize(session)

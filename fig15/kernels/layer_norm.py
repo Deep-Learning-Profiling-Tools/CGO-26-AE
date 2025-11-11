@@ -9,7 +9,6 @@ from pathlib import Path
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -225,7 +224,7 @@ class InstrumentedLayerNorm(torch.autograd.Function):
     """Instrumented LayerNorm autograd function with Proton profiling."""
 
     @staticmethod
-    def forward(ctx, x, normalized_shape, weight, bias, eps, use_cuda_event: bool = False):
+    def forward(ctx, x, normalized_shape, weight, bias, eps):
         # allocate output
         y = torch.empty_like(x)
         # reshape input data into 2D tensor
@@ -244,24 +243,10 @@ class InstrumentedLayerNorm(torch.autograd.Function):
         num_warps = min(max(BLOCK_SIZE // 256, 1), 8)
         
         # enqueue kernel
-        if use_cuda_event:
-            start_event = torch.cuda.Event(enable_timing=True)
-            end_event = torch.cuda.Event(enable_timing=True)
-            torch.cuda._sleep(1_000_000)
-            start_event.record()
-
         instrumented_layer_norm_fwd_kernel[(M, )](
             x_arg, y, weight, bias, mean, rstd,
             x_arg.stride(0), N, eps,
             BLOCK_SIZE=BLOCK_SIZE, num_warps=num_warps, num_ctas=1)
-        
-        if use_cuda_event:
-            end_event.record()
-            torch.cuda.synchronize()
-            elapsed_time = start_event.elapsed_time(end_event)
-            log_cuda_event_time("layer_norm", elapsed_time)
-            print(f"Outside layer_norm elapsed time by cuda event: {elapsed_time} ms")
-    
         
         ctx.save_for_backward(x, weight, bias, mean, rstd)
         ctx.BLOCK_SIZE = BLOCK_SIZE
@@ -307,12 +292,12 @@ class InstrumentedLayerNorm(torch.autograd.Function):
 
 
 # instrumented_layer_norm = InstrumentedLayerNorm.apply
-def instrumented_layer_norm(x, normalized_shape, weight, bias, eps, use_cuda_event: bool = False):
+def instrumented_layer_norm(x, normalized_shape, weight, bias, eps):
     # Pass positionally into .apply (no kwargs!)
-    return InstrumentedLayerNorm.apply(x, normalized_shape, weight, bias, eps, use_cuda_event)
+    return InstrumentedLayerNorm.apply(x, normalized_shape, weight, bias, eps)
 
 
-def benchmark_instrumented_layer_norm(M, N, dtype=torch.float16, eps=1e-5, device=DEVICE, mode='forward', use_cuda_event: bool = False):
+def benchmark_instrumented_layer_norm(M, N, dtype=torch.float16, eps=1e-5, device=DEVICE, mode='forward'):
     """Benchmark instrumented layer norm with cycle measurement."""
     # create data
     x_shape = (M, N)
@@ -329,7 +314,7 @@ def benchmark_instrumented_layer_norm(M, N, dtype=torch.float16, eps=1e-5, devic
                 _ = instrumented_layer_norm(x, w_shape, weight, bias, eps)
 
             # Actual benchmark
-            result = instrumented_layer_norm(x, w_shape, weight, bias, eps, use_cuda_event=use_cuda_event)
+            result = instrumented_layer_norm(x, w_shape, weight, bias, eps)
     else:
         # Backward mode
         dy = .1 * torch.randn_like(x)
@@ -394,7 +379,6 @@ if __name__ == "__main__":
     parser.add_argument("--test", action="store_true", help="Run correctness test")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -424,9 +408,7 @@ if __name__ == "__main__":
         )
         sessions.append(instrument_session)
 
-    result = benchmark_instrumented_layer_norm(
-        M, N, mode=args.mode, use_cuda_event=args.use_cuda_event if args.instrument else True
-    )
+    result = benchmark_instrumented_layer_norm(M, N, mode=args.mode)
 
     for session in reversed(sessions):
         proton.finalize(session)

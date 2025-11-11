@@ -27,7 +27,6 @@ from triton.tools.tensor_descriptor import TensorDescriptor
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -506,7 +505,7 @@ def _attn_bwd(Q, K, V, sm_scale,  #
 class _attention(torch.autograd.Function):
 
     @staticmethod
-    def forward(ctx, q, k, v, causal, sm_scale, warp_specialize=True, use_cuda_event: bool = False):
+    def forward(ctx, q, k, v, causal, sm_scale, warp_specialize=True):
         # shape constraints
         HEAD_DIM_Q, HEAD_DIM_K = q.shape[-1], k.shape[-1]
         # when v is in float8_e5m2 it is transposed.
@@ -542,11 +541,6 @@ class _attention(torch.autograd.Function):
             else:
                 extra_kern_args["maxnreg"] = 80
         # Manually specify launch configuration similar to grouped_gemm_original.py
-        if use_cuda_event:
-            start_event = torch.cuda.Event(enable_timing=True)
-            end_event = torch.cuda.Event(enable_timing=True)
-            torch.cuda._sleep(1_000_000)
-            start_event.record()
         _attn_fwd[grid](
             sm_scale, M,  #
             q.shape[0], q.shape[1],  #
@@ -562,13 +556,6 @@ class _attention(torch.autograd.Function):
             num_warps=4,  #
             num_stages=2,  #
             **extra_kern_args)
-        if use_cuda_event:
-            end_event.record()
-            torch.cuda.synchronize()
-            elapsed_time = start_event.elapsed_time(end_event)
-            log_cuda_event_time("fused_attention", elapsed_time)
-            print(f"Outside fused_attn_forward elapsed time by cuda event: {elapsed_time} ms")
-
 
         ctx.save_for_backward(q, k, v, o, M)
         ctx.sm_scale = sm_scale
@@ -620,9 +607,9 @@ class _attention(torch.autograd.Function):
 
 
 # attention = _attention.apply
-def attention(q, k, v, causal, sm_scale, warp_specialize=True, use_cuda_event: bool = False):
+def attention(q, k, v, causal, sm_scale, warp_specialize=True):
     # Important: .apply only takes positional args
-    return _attention.apply(q, k, v, causal, sm_scale, warp_specialize, use_cuda_event)
+    return _attention.apply(q, k, v, causal, sm_scale, warp_specialize)
 
 TORCH_HAS_FP8 = hasattr(torch, 'float8_e5m2')
 
@@ -774,7 +761,7 @@ def bench_flash_attention(BATCH, H, N_CTX, HEAD_DIM, causal, warp_specialize, mo
     return total_flops * 1e-12 / (ms * 1e-3)
 
 
-def simple_fused_attention_test(use_cuda_event: bool = False):
+def simple_fused_attention_test():
     """Simple test function for profiling fused attention"""
     Z, H, N_CTX, HEAD_DIM = 4, 64, 4096, 128
     causal = True
@@ -793,7 +780,7 @@ def simple_fused_attention_test(use_cuda_event: bool = False):
         _ = attention(q, k, v, causal, sm_scale, warp_specialize).half()
     
     # Run fused attention
-    tri_out = attention(q, k, v, causal, sm_scale, warp_specialize, use_cuda_event).half()    
+    tri_out = attention(q, k, v, causal, sm_scale, warp_specialize).half()
     # Verify correctness
     M = torch.tril(torch.ones((N_CTX, N_CTX), device=DEVICE))
     p = torch.matmul(q, k.transpose(2, 3)) * sm_scale
@@ -819,7 +806,6 @@ if __name__ == "__main__":
     parser.add_argument("--simple", action="store_true", help="Run simple test")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data type to collect with Proton instrumentation mode")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -846,9 +832,7 @@ if __name__ == "__main__":
         sessions.append(instrument_session)
 
     if args.simple:
-        _ = simple_fused_attention_test(
-            use_cuda_event=args.use_cuda_event if args.instrument else True
-        )
+        _ = simple_fused_attention_test()
     else:
         # only works on post-Ampere GPUs right now
         bench_flash_attention.run(save_path=".", print_data=True)

@@ -58,7 +58,7 @@ def bench_mlp(batch_per_expt, dim1, dim2, n_expts_tot, n_expts_act, x_dtype, w_d
     w1, w1_flex, w1_scale = quantize_weight(w1, w_dtype, **opt1)
     w2, w2_flex, w2_scale = quantize_weight(w2, w_dtype, **opt2)
     pcg = PrecisionConfig(flex_ctx=FlexCtx(rhs_data=wg_flex), weight_scale=wg_scale)
-    act = FusedActivation(FnSpecs("swiglu", triton_kernels.swiglu.swiglu_fn, ("alpha", "limit")), (1.0, 1.0), 2)
+    act = FusedActivation(FnSpecs("swiglu", triton_kernels.swiglu.swiglu_fn, ("alpha", "limit"), reduction_n=2), (1.0, 1.0))
     pc1 = PrecisionConfig(flex_ctx=FlexCtx(rhs_data=w1_flex), weight_scale=w1_scale)
     pc2 = PrecisionConfig(flex_ctx=FlexCtx(rhs_data=w2_flex), weight_scale=w2_scale)
 
@@ -152,15 +152,5 @@ if __name__ == "__main__":
                          name="gpt-oss-x2")
         triton_dist.cleanup()
     else:
-        roofline_mlp(batch_sizes_dense, 8192, 8192, 1, 1, quantized_dtypes[0], quantized_dtypes[1], TP=1, EP=1,
-                     name="dense")
         roofline_mlp(batch_sizes_moe, 5760, 5760, 128, 4, dense_dtypes[0], dense_dtypes[1], TP=1, EP=1,
-                     name="gpt-oss-x2")
-        roofline_mlp(batch_sizes_moe, 5760, 5760, 128, 4, quantized_dtypes[0], quantized_dtypes[1], TP=1, EP=1,
-                     name="gpt-oss-x2")
-        roofline_mlp(batch_sizes_moe, 5760, 5760, 128, 4, quantized_dtypes[0], quantized_dtypes[1], TP=2, EP=1,
-                     name="gpt-oss-x2")
-        roofline_mlp(batch_sizes_moe, 5760, 5760, 128, 4, quantized_dtypes[0], quantized_dtypes[1], TP=4, EP=1,
-                     name="gpt-oss-x2")
-        roofline_mlp(batch_sizes_moe, 5760, 5760, 128, 4, quantized_dtypes[0], quantized_dtypes[1], TP=8, EP=1,
                      name="gpt-oss-x2")

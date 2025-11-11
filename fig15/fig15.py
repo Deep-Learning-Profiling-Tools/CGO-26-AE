@@ -107,6 +107,16 @@ for kernel_name in kernel_names:
 cols = ["Name", "gh200-overheads", "mi300-overheads"]
 df = pd.DataFrame(raw, columns=cols).set_index("Name")
 
+# Print overhead data in table format
+print("\n" + "="*70)
+print(f"{'Kernel Names':<25} {'gh200-overhead':<20} {'mi300x-overhead':<20}")
+print("="*70)
+for kernel_name in kernel_names:
+    gh200_val = df.loc[kernel_name, "gh200-overheads"]
+    mi300_val = df.loc[kernel_name, "mi300-overheads"]
+    print(f"{kernel_name:<25} {gh200_val:<20.10f} {mi300_val:<20.10f}")
+print("="*70 + "\n")
+
 labels = df.index.tolist()
 x = np.arange(len(labels))
 width = 0.35

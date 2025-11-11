@@ -177,7 +177,7 @@ if __name__ == "__main__":
     if args.profile:
         cupti_profile_name = f"softmax_cupti_wInstrument{args.instrument}"
         cupti_session = proton.start(
-            cupti_profile_name, backend="cupti", hook="triton", data="tree"
+            cupti_profile_name, hook="triton", data="tree"
         )
         sessions.append(cupti_session)
     if args.instrument:

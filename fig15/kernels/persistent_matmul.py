@@ -191,7 +191,6 @@ if __name__ == "__main__":
         cupti_profile_name = f"persistent_matmul_cupti_wInstrument{args.instrument}"
         cupti_session = proton.start(
             cupti_profile_name,
-            backend="cupti",
             hook="triton",
             data="tree",
         )

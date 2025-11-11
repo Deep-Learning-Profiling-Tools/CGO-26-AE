@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = "==3.13.1"
 dependencies = [
     "bitsandbytes @ https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl",
+    "brokenaxes",
     "datasets",
     "kernels",
     "llnl-hatchet>=2025.1.1",

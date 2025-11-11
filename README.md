@@ -39,4 +39,6 @@ UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync --extra rocm
 
 # Figure 15
 
-TODO...
+1. `cd fig15`
+2. Start experiments by `bash run_exp_and_visualize.sh`
+3. Plot Figure 15 by `python fig15.py`

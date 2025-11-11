@@ -4,20 +4,105 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from brokenaxes import brokenaxes
+from pathlib import Path
 
-# Data
-raw = [
-    ["fused_softmax", 1.040776595, 1.1007877],
-    ["grouped_gemm", 1.004727857, 1.005781726],
-    ["layer_norm", 1.172689386, 1.160086201],
-    ["low_memory_dropout", 1.130898257, 1.119103734],
-    ["matmul", 1.016415291, 1.068560898],
-    ["swiglu", 1.041481268, 1.070833197],
-    ["topk", 1.078303451, 1.021686332],
-    ["persistent_matmul", 1.003418845, 1.009570271],
-    ["matmal_ogs", 0.9909863181, 1.024854553],
-    ["fused_attention", 1.014032246, 1.33776454],
+# Original hardcoded data (commented out)
+# raw = [
+#     ["fused_softmax", 1.040776595, 1.1007877],
+#     ["grouped_gemm", 1.004727857, 1.005781726],
+#     ["layer_norm", 1.172689386, 1.160086201],
+#     ["low_memory_dropout", 1.130898257, 1.119103734],
+#     ["matmul", 1.016415291, 1.068560898],
+#     ["swiglu", 1.041481268, 1.070833197],
+#     ["topk", 1.078303451, 1.021686332],
+#     ["persistent_matmul", 1.003418845, 1.009570271],
+#     ["matmal_ogs", 0.9909863181, 1.024854553],
+#     ["fused_attention", 1.014032246, 1.33776454],
+# ]
+
+# Kernel name mapping: raw name -> CSV name
+kernel_name_mapping = {
+    "fused_softmax": "fused_softmax",
+    "grouped_gemm": "grouped_gemm",
+    "layer_norm": "layer_norm_forward",
+    "low_memory_dropout": "seeded_dropout",
+    "matmul": "matmul",
+    "swiglu": "swiglu",
+    "topk": "topk",
+    "persistent_matmul": "persistent_matmul",
+    "matmul_ogs": "matmul_ogs",
+    "fused_attention": "fused_attention",
+}
+
+# Define kernel names in the order they should appear
+kernel_names = [
+    "fused_softmax",
+    "grouped_gemm",
+    "layer_norm",
+    "low_memory_dropout",
+    "matmul",
+    "swiglu",
+    "topk",
+    "persistent_matmul",
+    "matmul_ogs",
+    "fused_attention",
 ]
+
+# Load CSV files
+script_dir = Path(__file__).parent
+nv_csv_path = script_dir / "kernels" / "cupti_profile_timings_nv.csv"
+amd_csv_path = script_dir / "kernels" / "cupti_profile_timings_amd.csv"
+
+# Check which CSV files exist
+has_nv_data = nv_csv_path.exists()
+has_amd_data = amd_csv_path.exists()
+
+def calculate_overhead_from_csv(csv_path):
+    """Calculate overhead from CSV file: instrumented/baseline"""
+    df_csv = pd.read_csv(csv_path)
+    overheads = {}
+
+    for kernel in df_csv['kernel'].unique():
+        kernel_data = df_csv[df_csv['kernel'] == kernel]
+        baseline = kernel_data[kernel_data['configuration'] == 'baseline']['time_ns']
+        instrumented = kernel_data[kernel_data['configuration'] == 'instrumented']['time_ns']
+
+        if not baseline.empty and not instrumented.empty:
+            overhead = instrumented.values[0] / baseline.values[0]
+            overheads[kernel] = overhead
+
+    return overheads
+
+# Load overhead data
+nv_overheads = {}
+amd_overheads = {}
+
+if has_nv_data:
+    nv_overheads = calculate_overhead_from_csv(nv_csv_path)
+    print(f"Loaded NVIDIA data from {nv_csv_path}")
+
+if has_amd_data:
+    amd_overheads = calculate_overhead_from_csv(amd_csv_path)
+    print(f"Loaded AMD data from {amd_csv_path}")
+
+# Build raw data
+raw = []
+for kernel_name in kernel_names:
+    csv_kernel_name = kernel_name_mapping.get(kernel_name)
+
+    # Get GH200 overhead
+    if has_nv_data and csv_kernel_name and csv_kernel_name in nv_overheads:
+        gh200_overhead = nv_overheads[csv_kernel_name]
+    else:
+        gh200_overhead = 0
+
+    # Get MI300X overhead
+    if has_amd_data and csv_kernel_name and csv_kernel_name in amd_overheads:
+        mi300_overhead = amd_overheads[csv_kernel_name]
+    else:
+        mi300_overhead = 0
+
+    raw.append([kernel_name, gh200_overhead, mi300_overhead])
 
 cols = ["Name", "gh200-overheads", "mi300-overheads"]
 df = pd.DataFrame(raw, columns=cols).set_index("Name")

@@ -1049,6 +1049,9 @@ def bench(Z, H, N_CTX, HEAD_DIM, causal, provider):
     with torch.nn.attention.sdpa_kernel([torch.nn.attention.SDPBackend.CUDNN_ATTENTION]):
         if provider == "triton":
             fn = lambda: attention_forward(q, k, v, causal, sm_scale)
+            proton.start("gluon_attention", backend="instrumentation")
+            fn()
+            proton.finalize()
         elif provider == "cudnn":
             fn = lambda: torch.nn.functional.scaled_dot_product_attention(q, k, v, scale=sm_scale, is_causal=causal)
         else:

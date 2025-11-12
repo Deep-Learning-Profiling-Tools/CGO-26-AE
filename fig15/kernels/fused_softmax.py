@@ -10,7 +10,6 @@ from pathlib import Path
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -70,7 +69,7 @@ def instrumented_softmax_kernel(output_ptr, input_ptr, input_row_stride, output_
     pl.exit_scope("kernel_start")
 
 
-def instrumented_softmax(x, use_cuda_event: bool = False):
+def instrumented_softmax(x):
     """Wrapper function for instrumented softmax."""
     n_rows, n_cols = x.shape
     
@@ -115,25 +114,12 @@ def instrumented_softmax(x, use_cuda_event: bool = False):
     num_programs = min(num_programs, n_rows)
     
     # Launch kernel
-    if use_cuda_event:
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        torch.cuda._sleep(1_000_000)
-        start_event.record()
-
     kernel[(num_programs, 1, 1)](y, x, x.stride(0), y.stride(0), n_rows, n_cols, BLOCK_SIZE, num_stages)
-    
-    if use_cuda_event:
-        end_event.record()
-        torch.cuda.synchronize()
-        elapsed_time = start_event.elapsed_time(end_event)
-        log_cuda_event_time("fused_softmax", elapsed_time)
-        print(f"Outside swiglu elapsed time by cuda event: {elapsed_time} ms")
 
     return y
 
 
-def benchmark_instrumented_softmax(M, N, device="cuda", use_cuda_event: bool = False):
+def benchmark_instrumented_softmax(M, N, device="cuda"):
     """Benchmark instrumented softmax kernel with cycle measurement."""
     x = torch.randn(M, N, device=device, dtype=torch.float32)
     
@@ -142,7 +128,7 @@ def benchmark_instrumented_softmax(M, N, device="cuda", use_cuda_event: bool = F
         _ = instrumented_softmax(x)
     with proton.scope(f"softmax_{M}_{N}"):
         # Actual benchmark
-        result = instrumented_softmax(x, use_cuda_event)
+        result = instrumented_softmax(x)
 
     return result
 
@@ -165,7 +151,6 @@ if __name__ == "__main__":
     parser.add_argument("--cols", type=int, default=8192, help="Number of columns")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
     args = parser.parse_args()
     
     set_profile_enabled(args.instrument)
@@ -191,9 +176,7 @@ if __name__ == "__main__":
         )
         sessions.append(instrument_session)
 
-    result = benchmark_instrumented_softmax(
-        M, N, use_cuda_event=args.use_cuda_event if args.instrument else True
-    )
+    result = benchmark_instrumented_softmax(M, N)
 
     for session in reversed(sessions):
         proton.finalize(session)

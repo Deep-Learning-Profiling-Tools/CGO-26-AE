@@ -1,0 +1,65 @@
+[project]
+name = "cgo-26-ae"
+version = "0.1.0"
+description = "CGO 2026 Artifact for Proton"
+readme = "README.md"
+requires-python = "==3.13.1"
+dependencies = [
+    "bitsandbytes",
+    "brokenaxes",
+    "datasets",
+    "llnl-hatchet",
+    "matplotlib",
+    "pytest",
+    "triton",
+    "torch",
+    "triton_kernels",
+    "torchvision",
+    "unsloth",
+    "unsloth-zoo",
+]
+
+[project.optional-dependencies]
+cuda = [
+    "torch==2.9.0+cu128",
+    "torchvision"
+]
+rocm = [
+    "torch==2.9.0",
+    "torchvision",
+    "bitsandbytes"
+]
+
+[tool.uv]
+override-dependencies = [
+    "xformers; sys_platform == 'never'",
+    "pytorch-triton-rocm; sys_platform == 'never'",
+]
+
+conflicts = [
+    [
+        {extra = "cuda"},
+        {extra = "rocm"}
+    ],
+]
+
+[tool.uv.sources]
+triton = { path = "./submodules/triton", editable=true}
+triton_kernels = { path = "./submodules/triton/python/triton_kernels", editable=true}
+torch = [ 
+    { index = "pytorch", extra = "cuda"},
+    { url =  "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"},
+]
+torchvision = [
+    { index = "pytorch", extra = "cuda" },
+    { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"}
+]
+bitsandbytes = [
+    { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl", extra = "rocm"}
+]
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+

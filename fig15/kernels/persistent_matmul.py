@@ -10,7 +10,6 @@ from pathlib import Path
 from utils import (
     extract_kernel_time_from_hatchet,
     log_cupti_profile_time,
-    log_cuda_event_time,
     set_profile_enabled,
 )
 
@@ -104,7 +103,7 @@ def persistent_matmul_kernel(a_ptr, b_ptr, c_ptr,
     pl.exit_scope("compute_phase")
     pl.exit_scope("kernel_start")
 
-def persistent_matmul(a, b, use_cuda_event:bool = False):
+def persistent_matmul(a, b):
     # Check constraints
     assert a.shape[1] == b.shape[0], "Incompatible dimensions"
     assert a.is_contiguous(), "Matrix A must be contiguous"
@@ -121,12 +120,6 @@ def persistent_matmul(a, b, use_cuda_event:bool = False):
     def grid(META):
         return (min(NUM_SMS, triton.cdiv(M, META["BLOCK_SIZE_M"]) * triton.cdiv(N, META["BLOCK_SIZE_N"])), )
     
-    if use_cuda_event:
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        torch.cuda._sleep(1_000_000)
-        start_event.record()
-
     persistent_matmul_kernel[grid](
         a, b, c,
         M, N, K,
@@ -139,17 +132,11 @@ def persistent_matmul(a, b, use_cuda_event:bool = False):
         BLOCK_SIZE_K=64,
         GROUP_SIZE_M=8,
     )
-    if use_cuda_event:
-        end_event.record()
-        torch.cuda.synchronize()
-        elapsed_time = start_event.elapsed_time(end_event)
-        log_cuda_event_time("persistent_matmul", elapsed_time)
-        print(f"Outside persistent matmul elapsed time by cuda event: {elapsed_time} ms")
 
     return c
 
 
-def benchmark_persistent_matmul(M, N, K, use_cuda_event: bool = False):
+def benchmark_persistent_matmul(M, N, K):
     # Create test matrices
     a = torch.randn((M, K), device=DEVICE, dtype=torch.float16)
     b = torch.randn((K, N), device=DEVICE, dtype=torch.float16)
@@ -158,9 +145,9 @@ def benchmark_persistent_matmul(M, N, K, use_cuda_event: bool = False):
     torch_result = torch.matmul(a, b)
     # warm-up
     for _ in range(5):
-        triton_result = persistent_matmul(a, b, use_cuda_event=False)
+        triton_result = persistent_matmul(a, b)
     
-    triton_result = persistent_matmul(a, b, use_cuda_event=use_cuda_event)    
+    triton_result = persistent_matmul(a, b)
     if torch.allclose(triton_result, torch_result, atol=1e-2, rtol=1e-2):
         print("Correctness verified!")
     else:
@@ -178,7 +165,6 @@ if __name__ == "__main__":
     parser.add_argument("--K", type=int, default=4096, help="Matrix dimension K")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
-    parser.add_argument("--use-cuda-event", action="store_true", help="Enable cudaEvent time measurement")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
@@ -206,9 +192,7 @@ if __name__ == "__main__":
         )
         sessions.append(instrument_session)
 
-    result = benchmark_persistent_matmul(
-        M, N, K, use_cuda_event=args.use_cuda_event if args.instrument else True
-    )
+    result = benchmark_persistent_matmul(M, N, K)
 
     for session in reversed(sessions):
         proton.finalize(session)

@@ -16,27 +16,25 @@ fi
     set -x
     DUMP_DIR="$(pwd)/ttgir_dump"
     KERNELS_DIR="$(pwd)/kernels"
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_softmax.py --profile --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/grouped_gemm_original.py --profile --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/layer_norm.py --profile --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/low_memory_dropout.py --profile --buffer-size 512 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul.py --profile --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/swiglu.py --profile --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/topk_original.py --profile --buffer-size 2048 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/persistent_matmul.py --profile --buffer-size 512 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_attention.py --profile --buffer-size 1024 --simple --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul_ogs_original.py --profile --buffer-size 256 --use-cuda-event
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_softmax.py --profile --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/grouped_gemm_original.py --profile --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/layer_norm.py --profile --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/low_memory_dropout.py --profile --buffer-size 512 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul.py --profile --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/swiglu.py --profile --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/topk_original.py --profile --buffer-size 2048 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/persistent_matmul.py --profile --buffer-size 512 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_attention.py --profile --buffer-size 1024 --simple 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul_ogs.py --profile --buffer-size 512 
 
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_softmax.py --profile --instrument --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/grouped_gemm_original.py --profile --instrument --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/layer_norm.py --profile --instrument --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/low_memory_dropout.py --profile --instrument --buffer-size 512 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul.py --profile --instrument --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/swiglu.py --profile --instrument --buffer-size 1024 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/topk_original.py --profile --instrument --buffer-size 2048 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/persistent_matmul.py --profile --instrument --buffer-size 512 --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_attention.py --profile  --instrument --buffer-size 1024 --simple --use-cuda-event
-    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul_ogs_original.py --profile --instrument --buffer-size 256 --use-cuda-event
-    # TODO (Hao): visualize results and produce the figure
-
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_softmax.py --profile --instrument --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/grouped_gemm_original.py --profile --instrument --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/layer_norm.py --profile --instrument --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/low_memory_dropout.py --profile --instrument --buffer-size 512 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul.py --profile --instrument --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/swiglu.py --profile --instrument --buffer-size 1024 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/topk_original.py --profile --instrument --buffer-size 2048 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/persistent_matmul.py --profile --instrument --buffer-size 512 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/fused_attention.py --profile  --instrument --buffer-size 1024 --simple 
+    TRITON_ALWAYS_COMPILE=1 TRITON_KERNEL_DUMP=1 TRITON_DUMP_DIR="$DUMP_DIR" python kernels/matmul_ogs.py --profile --instrument --buffer-size 512 
 )

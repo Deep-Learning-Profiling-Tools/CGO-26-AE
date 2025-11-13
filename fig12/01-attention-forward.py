@@ -1060,7 +1060,7 @@ def bench(Z, H, N_CTX, HEAD_DIM, causal, provider):
             session_id = proton.start("gluon_attention_profile", backend="instrumentation", mode="default:buffer_type=global", data="tree")
             fn()
             proton.deactivate(session_id)
-            session_id = proton.start("gluon_attention_trace", backend="instrumentation", mode="default:buffer_type=global", data="tree")
+            session_id = proton.start("gluon_attention_trace", backend="instrumentation", mode="default:buffer_type=global", data="trace")
             fn()
             proton.deactivate(session_id)
             proton.finalize()

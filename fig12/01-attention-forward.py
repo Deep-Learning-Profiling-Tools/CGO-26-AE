@@ -1058,7 +1058,7 @@ def bench(Z, H, N_CTX, HEAD_DIM, causal, provider):
             # warmup
             fn()
             proton.start("gluon_attention_profile", backend="instrumentation", mode="default:buffer_type=global", data="tree")
-            proton.start("gluon_attention_trace", backend="instrumentation", mode="trace:buffer_type=global", data="trace")
+            proton.start("gluon_attention_trace", backend="instrumentation", mode="default:buffer_type=global", data="trace")
             fn()
             proton.finalize()
         elif provider == "cudnn":

@@ -469,7 +469,7 @@ def _join_n(xs):
 
 @gluon.jit
 def _attn_fwd_load(config, chnls, descs, M, STAGE: gl.constexpr):
-    pl.enter_scope("_attn_fwd_load")
+    pl.enter_scope("attn_fwd_load")
     q_chnl, kv_chnl, o_chnl, epi_chnl, s0_chnl, s1_chnl, c0_chnl, c1_chnl, exp_turnstile = chnls
     desc_q, desc_k, desc_v, desc_o = descs
 
@@ -502,12 +502,12 @@ def _attn_fwd_load(config, chnls, descs, M, STAGE: gl.constexpr):
             issue_async_tma_load(k_smem, k_bar, desc_k, offsetkv_y)
             v_smem, v_bar, kv_producer = kv_producer.acquire()
             issue_async_tma_load(v_smem, v_bar, desc_v, offsetkv_y)
-    pl.exit_scope("_attn_fwd_load")
+    pl.exit_scope("attn_fwd_load")
 
 
 @gluon.jit
 def _attn_fwd_mma(config, chnls, descs, M, STAGE: gl.constexpr):
-    pl.enter_scope("_attn_fwd_mma")
+    pl.enter_scope("attn_fwd_mma")
     q_chnl, kv_chnl, o_chnl, epi_chnl, s0_chnl, s1_chnl, c0_chnl, c1_chnl, exp_turnstile = chnls
     desc_q, desc_k, desc_v, desc_o = descs
 
@@ -565,7 +565,7 @@ def _attn_fwd_mma(config, chnls, descs, M, STAGE: gl.constexpr):
         s1_tmem, s1_bar, s1_producer = s1_producer.acquire()
         p1_tmem = _borrow_s_as_p(config, s1_tmem)
         tcgen05_mma(p1_tmem, v_smem, o1_tmem, use_acc=o1_init, mbarriers=[o1_bar, v_bar, s0_bar, s1_bar])
-    pl.exit_scope("_attn_fwd_mma")
+    pl.exit_scope("attn_fwd_mma")
 
 
 @gluon.jit
@@ -623,23 +623,28 @@ def _softmax_inner_loop(tile_id: gl.constexpr, config, prog,  #
 
     for start_n in range(lo, hi, config.BLOCK_N):
         s_tmem, s_bar, s_consumer = s_consumer.acquire()
-        qk = _subtiled_qk_load(config, s_tmem)
+        with pl.scope("qk_load"):
+            qk = _subtiled_qk_load(config, s_tmem)
 
         if STAGE == 2:
-            col_limit_right = (offs_m - start_n + 1)[:, None]
-            qk = _apply_causal_mask(qk, col_limit_right)
+            with pl.scope("causal_mask"):
+                col_limit_right = (offs_m - start_n + 1)[:, None]
+                qk = _apply_causal_mask(qk, col_limit_right)
 
-        m_ij = gl.maximum(m_i, gl.max(qk, 1) * config.qk_scale)
-        alpha = gl.exp2(m_i - m_ij)
+        with pl.scope("softmax_rowmax"):
+            m_ij = gl.maximum(m_i, gl.max(qk, 1) * config.qk_scale)
 
-        alpha_tmem = _borrow_s_as_alpha(config, s_tmem)
-        alpha_tmem.store(gl.convert_layout(alpha.expand_dims(1), config.alpha_2d_layout))
-        mbarrier.arrive(corr_bar, count=1)
+        with pl.scope("softmax_exp2"):
+            alpha = gl.exp2(m_i - m_ij)
 
-        rowmax = float2.pack(-m_ij[:, None].broadcast_to(qk.shape), axis=1)
-        qk = float2.pack(qk, axis=1)
-        qk = float2.fma(qk, float2.full_like(qk, config.qk_scale), rowmax)
-        qk = float2.unpack(qk, axis=1)
+            alpha_tmem = _borrow_s_as_alpha(config, s_tmem)
+            alpha_tmem.store(gl.convert_layout(alpha.expand_dims(1), config.alpha_2d_layout))
+            mbarrier.arrive(corr_bar, count=1)
+
+            rowmax = float2.pack(-m_ij[:, None].broadcast_to(qk.shape), axis=1)
+            qk = float2.pack(qk, axis=1)
+            qk = float2.fma(qk, float2.full_like(qk, config.qk_scale), rowmax)
+            qk = float2.unpack(qk, axis=1)
 
         # Force the softmax partitions to take turns in the EX2 section. This
         # prevents contention for the EX2 unit and improves utilization.
@@ -658,11 +663,12 @@ def _softmax_inner_loop(tile_id: gl.constexpr, config, prog,  #
         if config.use_exp2_turnstile:
             mbarrier.arrive(exp_bar, count=1)
 
-        l_ij = float2.pack2(*_split_n(p)).sum(axis=1)
-        l_ij = Float2Tensor(gl.convert_layout(l_ij.value, l_i.value.type.layout, assert_trivial=True))
-        alpha = gl.convert_layout(alpha, l_i.value.type.layout, assert_trivial=True)
-        l_i = float2.fma(l_i, float2.pack2(alpha, alpha), l_ij)
-        m_i = m_ij
+        with pl.scope("softmax_reduce"):
+            l_ij = float2.pack2(*_split_n(p)).sum(axis=1)
+            l_ij = Float2Tensor(gl.convert_layout(l_ij.value, l_i.value.type.layout, assert_trivial=True))
+            alpha = gl.convert_layout(alpha, l_i.value.type.layout, assert_trivial=True)
+            l_i = float2.fma(l_i, float2.pack2(alpha, alpha), l_ij)
+            m_i = m_ij
 
     return m_i, l_i, corr_bar, s_consumer, corr_producer, exp_turnstile
 
@@ -717,7 +723,7 @@ def _softmax_tile(tile_id: gl.constexpr, config, M, desc_o, STAGE: gl.constexpr,
 def _attn_fwd_softmax0(config, chnls, descs, M, STAGE: gl.constexpr):
     q_chnl, kv_chnl, o_chnl, epi_chnl, s0_chnl, s1_chnl, c0_chnl, c1_chnl, exp_turnstile = chnls
     desc_q, desc_k, desc_v, desc_o = descs
-    with pl.scope("softmax_tile0"):
+    with pl.scope("attn_softmax_tile0"):
         _softmax_tile(0, config, M, desc_o, STAGE, s0_chnl, c0_chnl, exp_turnstile.create_producer())
 
 
@@ -725,13 +731,13 @@ def _attn_fwd_softmax0(config, chnls, descs, M, STAGE: gl.constexpr):
 def _attn_fwd_softmax1(config, chnls, descs, M, STAGE: gl.constexpr):
     q_chnl, kv_chnl, o_chnl, epi_chnl, s0_chnl, s1_chnl, c0_chnl, c1_chnl, exp_turnstile = chnls
     desc_q, desc_k, desc_v, desc_o = descs
-    with pl.scope("softmax_tile1"):
+    with pl.scope("attn_softmax_tile1"):
         _softmax_tile(1, config, M, desc_o, STAGE, s1_chnl, c1_chnl, exp_turnstile.create_consumer())
 
 
 @gluon.jit
 def _attn_fwd_epilogue(config, chnls, descs, M, STAGE: gl.constexpr):
-    pl.enter_scope("_attn_fwd_epilogue")
+    pl.enter_scope("attn_fwd_epilogue")
     q_chnl, kv_chnl, o_chnl, epi_chnl, s0_chnl, s1_chnl, c0_chnl, c1_chnl, exp_turnstile = chnls
     desc_q, desc_k, desc_v, desc_o = descs
 
@@ -750,7 +756,7 @@ def _attn_fwd_epilogue(config, chnls, descs, M, STAGE: gl.constexpr):
         mbarrier.arrive(o0_bar, count=1)
         tma.store_wait(0)
         mbarrier.arrive(o1_bar, count=1)
-    pl.exit_scope("_attn_fwd_epilogue")
+    pl.exit_scope("attn_fwd_epilogue")
 
 
 @gluon.jit
@@ -822,7 +828,7 @@ def _attn_fwd_correction_epilogue(config, prog, s_tmem, M, corr_consumer, epi_pr
 
 @gluon.jit
 def _attn_fwd_correction(config, chnls, descs, M, STAGE: gl.constexpr):
-    pl.enter_scope("_attn_fwd_correction")
+    pl.enter_scope("attn_fwd_correction")
     q_chnl, kv_chnl, o_chnl, epi_chnl, s0_chnl, s1_chnl, c0_chnl, c1_chnl, exp_turnstile = chnls
 
     s0_tmem = s0_chnl.mem.index(0)
@@ -852,7 +858,7 @@ def _attn_fwd_correction(config, chnls, descs, M, STAGE: gl.constexpr):
             config, prog, s0_tmem, M, corr0_consumer, epi_producer, o_consumer)
         corr1_consumer, epi_producer, o_consumer = _attn_fwd_correction_epilogue(  #
             config, prog, s1_tmem, M, corr1_consumer, epi_producer, o_consumer)
-    pl.exit_scope("_attn_fwd_correction")
+    pl.exit_scope("attn_fwd_correction")
 
 
 def attention_repr(specialization):
@@ -1001,10 +1007,10 @@ def test_op(Z, H, N_CTX, HEAD_DIM, causal, dtype, profile=False):
 
 BATCH = [4]
 N_HEADS = [32]
-HEAD_DIM = [64, 128]
-causal = [False, True]
-providers = ["triton-fp16", "triton-fp8"]
-N_CTX = [2**i for i in range(10, 17)]
+HEAD_DIM = [64]
+causal = [True]
+providers = ["triton-fp8"]
+N_CTX = [2**10]
 
 bench_configs = []
 for Z, H, D, is_causal in itertools.product(BATCH, N_HEADS, HEAD_DIM, causal):

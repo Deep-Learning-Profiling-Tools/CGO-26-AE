@@ -1010,7 +1010,7 @@ N_HEADS = [32]
 HEAD_DIM = [64]
 causal = [True]
 providers = ["triton-fp8"]
-N_CTX = [2**10]
+N_CTX = [2**11]
 
 bench_configs = []
 for Z, H, D, is_causal in itertools.product(BATCH, N_HEADS, HEAD_DIM, causal):
@@ -1055,7 +1055,7 @@ def bench(Z, H, N_CTX, HEAD_DIM, causal, provider):
     with torch.nn.attention.sdpa_kernel([torch.nn.attention.SDPBackend.CUDNN_ATTENTION]):
         if provider == "triton":
             fn = lambda: attention_forward(q, k, v, causal, sm_scale)
-            proton.start("gluon_attention", backend="instrumentation")
+            proton.start("gluon_attention", backend="instrumentation", mode="Default:buffer_type=global")
             fn()
             proton.finalize()
         elif provider == "cudnn":

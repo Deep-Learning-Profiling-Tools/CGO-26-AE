@@ -1057,9 +1057,12 @@ def bench(Z, H, N_CTX, HEAD_DIM, causal, provider):
             fn = lambda: attention_forward(q, k, v, causal, sm_scale)
             # warmup
             fn()
-            proton.start("gluon_attention_profile", backend="instrumentation", mode="default:buffer_type=global", data="tree")
-            proton.start("gluon_attention_trace", backend="instrumentation", mode="default:buffer_type=global", data="trace")
+            session_id = proton.start("gluon_attention_profile", backend="instrumentation", mode="default:buffer_type=global", data="tree")
             fn()
+            proton.deactivate(session_id)
+            session_id = proton.start("gluon_attention_trace", backend="instrumentation", mode="default:buffer_type=global", data="tree")
+            fn()
+            proton.deactivate(session_id)
             proton.finalize()
         elif provider == "cudnn":
             fn = lambda: torch.nn.functional.scaled_dot_product_attention(q, k, v, scale=sm_scale, is_causal=causal)

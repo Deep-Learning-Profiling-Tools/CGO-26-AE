@@ -852,7 +852,7 @@ def _attn_fwd_correction(config, chnls, descs, M, STAGE: gl.constexpr):
             config, prog, s0_tmem, M, corr0_consumer, epi_producer, o_consumer)
         corr1_consumer, epi_producer, o_consumer = _attn_fwd_correction_epilogue(  #
             config, prog, s1_tmem, M, corr1_consumer, epi_producer, o_consumer)
-    pl.exit_scope("_attn_fwd_attention")
+    pl.exit_scope("_attn_fwd_correction")
 
 
 def attention_repr(specialization):

@@ -2,11 +2,18 @@
 
 # It only works for rocm 6.4
 
-cd triton_kernels/bench
+uv pip install -e triton_kernels/
 
-torchrun --nproc-per-node=8 ./bench_mlp.py --tp 1 --ep 8 --name gpt-oss-x2
-torchrun --nproc-per-node=8 ./bench_mlp.py --tp 2 --ep 4 --name gpt-oss-x2
-torchrun --nproc-per-node=8 ./bench_mlp.py --tp 4 --ep 2 --name gpt-oss-x2
-torchrun --nproc-per-node=8 ./bench_mlp.py --tp 8 --ep 1 --name gpt-oss-x2
+(
+    set -x
+    cd triton_kernels/bench
 
-python plot.py
+    export NCCL_DEBUG=WARN
+    torchrun --standalone --nproc-per-node=8 ./bench_mlp.py --tp 1 --ep 8 --name gpt-oss-x2 
+    torchrun --standalone --nproc-per-node=8 ./bench_mlp.py --tp 2 --ep 4 --name gpt-oss-x2 
+    torchrun --standalone --nproc-per-node=8 ./bench_mlp.py --tp 4 --ep 2 --name gpt-oss-x2 
+    torchrun --standalone --nproc-per-node=8 ./bench_mlp.py --tp 8 --ep 1 --name gpt-oss-x2 
+
+    python plot.py
+    cd -
+)

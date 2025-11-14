@@ -18,6 +18,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ## Install NV Env if you are on GH200
 
 ```bash
+UV_SKIP_WHEEL_FILENAME_CHECK=1
 uv sync --extra cuda
 . .venv/bin/activate
 ```
@@ -25,7 +26,8 @@ uv sync --extra cuda
 ## Install AMD Env if you are on MI300X
 
 ```bash
-UV_SKIP_WHEEL_FILENAME_CHECK=1 uv sync --extra rocm
+UV_SKIP_WHEEL_FILENAME_CHECK=1
+uv sync --extra rocm
 . .venv/bin/activate
 ```
 

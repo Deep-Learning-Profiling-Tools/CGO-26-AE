@@ -10,6 +10,8 @@ else
     echo "GPU type unknown, output will be saved to cupti_profile_timings.csv"
 fi
 
+uv pip install -e triton_kernels/
+
 # run intra-kernel profiling
 (
     # make shell output verbose

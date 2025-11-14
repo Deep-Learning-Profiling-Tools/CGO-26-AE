@@ -155,7 +155,7 @@ dependencies = [
     { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
 ]
 wheels = [
-    { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl", hash = "sha256:ff38aab1615dab92f8c552dd29d1aced963c12ca61efc1433db26dbe888e8f45" },
+    { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl", hash = "sha256:8ea153df37bb1875c5a3b3bbfe6cc21c4c2272edfc432c82dd84e5ef7052dfea" },
 ]
 
 [package.metadata]
@@ -229,7 +229,6 @@ dependencies = [
     { name = "torchvision", version = "0.24.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine != 'aarch64' and extra == 'extra-9-cgo-26-ae-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-9-cgo-26-ae-cuda') or (sys_platform != 'linux' and extra == 'extra-9-cgo-26-ae-cuda') or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
     { name = "torchvision", version = "0.24.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "triton" },
-    { name = "triton-kernels" },
     { name = "unsloth" },
     { name = "unsloth-zoo" },
 ]
@@ -262,7 +261,6 @@ requires-dist = [
     { name = "torchvision", marker = "extra == 'cuda'", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "cgo-26-ae", extra = "cuda" } },
     { name = "torchvision", marker = "extra == 'rocm'", url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" },
     { name = "triton", editable = "submodules/triton" },
-    { name = "triton-kernels", editable = "submodules/triton/python/triton_kernels" },
     { name = "unsloth" },
     { name = "unsloth-zoo" },
 ]
@@ -1840,21 +1838,6 @@ requires-dist = [
     { name = "tabulate", marker = "extra == 'tutorials'" },
 ]
 provides-extras = ["build", "tests", "tutorials"]
-
-[[package]]
-name = "triton-kernels"
-version = "1.0.0"
-source = { editable = "submodules/triton/python/triton_kernels" }
-dependencies = [
-    { name = "numpy" },
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "numpy" },
-    { name = "pytest" },
-]
 
 [[package]]
 name = "triton-windows"

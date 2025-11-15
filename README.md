@@ -31,6 +31,46 @@ uv sync --extra rocm
 . .venv/bin/activate
 ```
 
+# Instructions to Reproduce Experiments
+
+Before proceeding, make sure you have activated python env by `. .venv/bin/activate`.
+
+# Figure 8
+
+```bash
+cd fig8
+. run.sh
+```
+
+The proton profile will be visualized and printed in the terminal outputs.
+
+# Figure 9
+
+```bash
+cd fig9
+. run.sh
+```
+
+Data and figures would be generated under `fig9/triton_kernels/bench/logs/gpt-oss-x2`
+
+# Figure 10
+
+```bash
+cd fig10
+. run.sh
+```
+
+Similar to figure 9, data and figures would be generated under `fig10/triton_kernels/bench/logs/gpt-oss-x2`
+
+# Figure 12
+
+```bash
+cd fig12
+. run.sh
+```
+
+Similar to figure 8, the proton profile will be visualized and printed in the terminal.
+
 # Figure 13 and Figure 14
 
 

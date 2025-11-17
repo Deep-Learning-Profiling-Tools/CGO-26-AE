@@ -160,17 +160,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", action="store_true", help="Enable timing profiling by Proton cupti backend")
     parser.add_argument("--instrument", action="store_true", help="Enable intra-kernel instrumentation profiling to get cycles (can run with cupti)")
-    parser.add_argument("--M", type=int, default=4096, help="Matrix dimension M")
-    parser.add_argument("--N", type=int, default=4096, help="Matrix dimension N") 
-    parser.add_argument("--K", type=int, default=4096, help="Matrix dimension K")
+    parser.add_argument("--M", type=int, default=8192, help="Matrix dimension M")
+    parser.add_argument("--N", type=int, default=8192, help="Matrix dimension N")
+    parser.add_argument("--K", type=int, default=8192, help="Matrix dimension K")
     parser.add_argument("--data", type=str, default="tree", choices=["tree", "trace"], help="data to collect with Proton instrumentation backend")
     parser.add_argument("--buffer-size", type=int, default=512, help="Proton buffer size")
 
     args = parser.parse_args()
     set_profile_enabled(args.instrument)
-    
+
     M, N, K = args.M, args.N, args.K
-    
+
     sessions = []
     cupti_profile_name = None
     if args.profile:

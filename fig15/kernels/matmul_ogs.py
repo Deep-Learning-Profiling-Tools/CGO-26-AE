@@ -7,10 +7,10 @@ import triton.profiler as proton
 import triton.profiler.language as pl
 from triton.profiler.mode import Default
 
-from triton_kernels.triton_kernels.matmul_ogs import (
+from triton_kernels.matmul_ogs import (
     matmul_ogs,
 )
-from triton_kernels.triton_kernels.matmul_ogs_details import opt_flags as opt_flags
+from triton_kernels.matmul_ogs_details import opt_flags as opt_flags
 
 from utils import (
     extract_kernel_time_from_hatchet,
@@ -31,7 +31,7 @@ def benchmark_matmul_ogs(
     x = torch.randn(m_tokens, k, device="cuda", dtype=torch.bfloat16)
     w = torch.randn(k, n, device="cuda", dtype=torch.bfloat16)
     bias = torch.randn(n, device="cuda", dtype=torch.float32)
-    
+
     _ = matmul_ogs(
         x,
         w,

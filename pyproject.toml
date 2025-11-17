@@ -7,7 +7,7 @@ requires-python = "==3.13.1"
 dependencies = [
     "bitsandbytes",
     "brokenaxes",
-    "datasets",
+    "datasets==4.3.0",
     "llnl-hatchet",
     "matplotlib",
     "pytest",
@@ -25,7 +25,7 @@ cuda = [
     "torchvision"
 ]
 rocm = [
-    "torch==2.9.0",
+    "torch",
     "torchvision",
     "bitsandbytes"
 ]
@@ -45,15 +45,17 @@ conflicts = [
 
 [tool.uv.sources]
 triton = { path = "./submodules/triton", editable=true}
+unsloth = { path = "./submodules/unsloth", editable=true }
+unsloth-zoo = { path = "./submodules/unsloth-zoo", editable=true }
 # we simply have copies of triton_kernels for each figure so that we can instrument them differently
 # triton_kernels = { path = "./submodules/triton/python/triton_kernels", editable=true}
 torch = [ 
     { index = "pytorch", extra = "cuda"},
-    { url =  "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"},
+    { url =  "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"},
 ]
 torchvision = [
     { index = "pytorch", extra = "cuda" },
-    { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"}
+    { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"}
 ]
 bitsandbytes = [
     { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl", extra = "rocm"}

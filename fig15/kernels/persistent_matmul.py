@@ -177,16 +177,14 @@ if __name__ == "__main__":
         cupti_profile_name = f"persistent_matmul_cupti_wInstrument{args.instrument}"
         cupti_session = proton.start(
             cupti_profile_name,
-            hook="triton",
             data="tree",
         )
         sessions.append(cupti_session)
     if args.instrument:
-        proton_mode = Default(buffer_size=args.buffer_size)
+        proton_mode = Default()
         instrument_session = proton.start(
             "persistent_matmul_instrumented",
             backend="instrumentation",
-            hook="triton",
             data=args.data,
             mode=proton_mode,
         )

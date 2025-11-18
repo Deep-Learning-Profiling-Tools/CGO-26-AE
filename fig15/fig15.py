@@ -123,7 +123,7 @@ width = 0.35
 
 # Create broken axes with gap from 0.05 to 0.95
 fig = plt.figure(figsize=(9, 2.4))
-bax = brokenaxes(ylims=((0, 0.025), (0.975, 1.4)), hspace=.05, d=0.007, fig=fig, despine=False)
+bax = brokenaxes(ylims=((0, 0.025), (0.75, 1.4)), hspace=.05, d=0.007, fig=fig, despine=False)
 
 # Define different colors for GH200 and MI300X
 gh200_color = (119/255, 170/255, 221/255)  # Light blue

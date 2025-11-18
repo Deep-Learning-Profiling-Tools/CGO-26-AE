@@ -20,7 +20,7 @@ from datetime import datetime
 # Model names mapping (file -> display name)
 MODEL_MAPPING = {
     "llama3_1_8b.py": "Llama-3.1-8B",
-    "llama3_70b_bnb_4bit.py": "Llama-3.3-70B",
+    "llama3_70b_bnb_4bit_amd.py": "Llama-3.3-70B",
     "gemma3_4b.py": "Gemma3-4B",
     "qwen3_30b_a3b.py": "Qwen3-30B-A3B",
     "gpt_oss_20b.py": "GPT-OSS-20B",

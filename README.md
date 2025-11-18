@@ -79,6 +79,9 @@ cd fig10
 bash run.sh
 ```
 
+> [!NOTE] 
+> This experiment does not work with ROCM 7.0 due to ROCM bugs, and it requires the user to install ROCM 6.4. Please try `uv pip install https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl`
+
 Similar to figure 9, data and figures would be generated under `fig10/triton_kernels/bench/logs/gpt-oss-x2`
 
 ### Figure 12

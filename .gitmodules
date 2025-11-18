@@ -7,3 +7,6 @@
 [submodule "submodules/unsloth-zoo"]
 	path = submodules/unsloth-zoo
 	url = https://github.com/unslothai/unsloth-zoo.git
+[submodule "submodules/bitsandbytes"]
+	path = submodules/bitsandbytes
+	url = https://github.com/bitsandbytes-foundation/bitsandbytes.git

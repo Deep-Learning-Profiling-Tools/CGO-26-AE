@@ -31,7 +31,7 @@ dependencies = [
     { name = "safetensors" },
     { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
     { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-9-cgo-26-ae-cuda'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/23/60/2757c4f03a8705dbf80b1268b03881927878dca5ed07d74f733fb6c219e0/accelerate-1.11.0.tar.gz", hash = "sha256:bb1caf2597b4cd632b917b5000c591d10730bb024a79746f1ee205bba80bd229", size = 393715, upload-time = "2025-10-20T14:42:25.025Z" }
 wheels = [
@@ -152,7 +152,7 @@ source = { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releas
 dependencies = [
     { name = "numpy", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "packaging", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
 ]
 wheels = [
     { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl", hash = "sha256:8ea153df37bb1875c5a3b3bbfe6cc21c4c2272edfc432c82dd84e5ef7052dfea" },
@@ -223,11 +223,11 @@ dependencies = [
     { name = "pytest" },
     { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
     { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-9-cgo-26-ae-cuda'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "torchvision", version = "0.24.0", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-9-cgo-26-ae-cuda') or (platform_machine != 'aarch64' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (sys_platform != 'linux' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
     { name = "torchvision", version = "0.24.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
     { name = "torchvision", version = "0.24.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine != 'aarch64' and extra == 'extra-9-cgo-26-ae-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-9-cgo-26-ae-cuda') or (sys_platform != 'linux' and extra == 'extra-9-cgo-26-ae-cuda') or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torchvision", version = "0.24.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torchvision", version = "0.25.0.dev20251117+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "triton" },
     { name = "unsloth" },
     { name = "unsloth-zoo" },
@@ -241,8 +241,8 @@ cuda = [
 ]
 rocm = [
     { name = "bitsandbytes", version = "0.49.0.dev0", source = { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl" } },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" } },
-    { name = "torchvision", version = "0.24.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" } },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" } },
+    { name = "torchvision", version = "0.25.0.dev20251117+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" } },
 ]
 
 [package.metadata]
@@ -250,19 +250,19 @@ requires-dist = [
     { name = "bitsandbytes" },
     { name = "bitsandbytes", marker = "extra == 'rocm'", url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl" },
     { name = "brokenaxes" },
-    { name = "datasets" },
+    { name = "datasets", specifier = "==4.3.0" },
     { name = "llnl-hatchet" },
     { name = "matplotlib" },
     { name = "pytest" },
     { name = "torch" },
     { name = "torch", marker = "extra == 'cuda'", specifier = "==2.9.0+cu128", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "cgo-26-ae", extra = "cuda" } },
-    { name = "torch", marker = "extra == 'rocm'", url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" },
+    { name = "torch", marker = "extra == 'rocm'", url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" },
     { name = "torchvision" },
     { name = "torchvision", marker = "extra == 'cuda'", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "cgo-26-ae", extra = "cuda" } },
-    { name = "torchvision", marker = "extra == 'rocm'", url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "extra == 'rocm'", url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" },
     { name = "triton", editable = "submodules/triton" },
-    { name = "unsloth" },
-    { name = "unsloth-zoo" },
+    { name = "unsloth", editable = "submodules/unsloth" },
+    { name = "unsloth-zoo", editable = "submodules/unsloth-zoo" },
 ]
 provides-extras = ["cuda", "rocm"]
 
@@ -340,7 +340,7 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
     { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-9-cgo-26-ae-cuda'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "triton", marker = "sys_platform == 'linux' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7e/97/45ff09cfcda7b200389204daa0125168e6544fba257adbbcdf728501d4f9/cut_cross_entropy-25.1.1.tar.gz", hash = "sha256:5fe5924509248b1aea5c890f8887c6a7759f7c8b1ebc0490e42c247c4f7c1e34", size = 22972, upload-time = "2025-01-07T12:21:53.896Z" }
@@ -359,7 +359,7 @@ wheels = [
 
 [[package]]
 name = "datasets"
-version = "4.4.1"
+version = "4.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dill" },
@@ -377,28 +377,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/93/bf/0dae295d6d1ba0b1a200a9dd216838464b5bbd05da01407cb1330b377445/datasets-4.4.1.tar.gz", hash = "sha256:80322699aa8c0bbbdb7caa87906da689c3c2e29523cff698775c67f28fdab1fc", size = 585341, upload-time = "2025-11-05T16:00:38.162Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/47/325206ac160f7699ed9f1798afa8f8f8d5189b03bf3815654859ac1d5cba/datasets-4.3.0.tar.gz", hash = "sha256:bc9118ed9afd92346c5be7ed3aaa00177eb907c25467f9d072a0d22777efbd2b", size = 582801, upload-time = "2025-10-23T16:31:51.547Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3b/5e/6f8d874366788ad5d549e9ba258037d974dda6e004843be1bda794571701/datasets-4.4.1-py3-none-any.whl", hash = "sha256:c1163de5211e42546079ab355cc0250c7e6db16eb209ac5ac6252f801f596c44", size = 511591, upload-time = "2025-11-05T16:00:36.365Z" },
-]
-
-[[package]]
-name = "diffusers"
-version = "0.35.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "filelock" },
-    { name = "huggingface-hub" },
-    { name = "importlib-metadata" },
-    { name = "numpy" },
-    { name = "pillow" },
-    { name = "regex" },
-    { name = "requests" },
-    { name = "safetensors" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/03/68/288ca23c7c05c73e87ffe5efffc282400ac9b017f7a9bb03883f4310ea15/diffusers-0.35.2.tar.gz", hash = "sha256:30ecd552303edfcfe1724573c3918a8462ee3ab4d529bdbd4c0045f763affded", size = 3366711, upload-time = "2025-10-15T04:05:17.213Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/2a/2e/38d9824f8c6bb048c5ba21c6d4da54c29c162a46b58b3ef907a360a76d3e/diffusers-0.35.2-py3-none-any.whl", hash = "sha256:d50d5e74fdd6dcf55e5c1d304bc52cc7c2659abd1752740d736d7b54078b4db5", size = 4121649, upload-time = "2025-10-15T04:05:14.391Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/51/409a8184ed35453d9cbb3d6b20d524b1115c2c2d117b85d5e9b06cd70b45/datasets-4.3.0-py3-none-any.whl", hash = "sha256:0ea157e72138b3ca6c7d2415f19a164ecf7d4c4fa72da2a570da286882e96903", size = 506846, upload-time = "2025-10-23T16:31:49.965Z" },
 ]
 
 [[package]]
@@ -488,11 +469,11 @@ wheels = [
 
 [[package]]
 name = "fsspec"
-version = "2025.10.0"
+version = "2025.9.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/24/7f/2747c0d332b9acfa75dc84447a066fdf812b5a6b8d30472b74d309bfe8cb/fsspec-2025.10.0.tar.gz", hash = "sha256:b6789427626f068f9a83ca4e8a3cc050850b6c0f71f99ddb4f542b8266a26a59", size = 309285, upload-time = "2025-10-30T14:58:44.036Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/e0/bab50af11c2d75c9c4a2a26a5254573c0bd97cea152254401510950486fa/fsspec-2025.9.0.tar.gz", hash = "sha256:19fd429483d25d28b65ec68f9f4adc16c17ea2c7c7bf54ec61360d478fb19c19", size = 304847, upload-time = "2025-09-02T19:10:49.215Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/eb/02/a6b21098b1d5d6249b7c5ab69dde30108a71e4e819d4a9778f1de1d5b70d/fsspec-2025.10.0-py3-none-any.whl", hash = "sha256:7c7712353ae7d875407f97715f0e1ffcc21e33d5b24556cb1e090ae9409ec61d", size = 200966, upload-time = "2025-10-30T14:58:42.53Z" },
+    { url = "https://files.pythonhosted.org/packages/47/71/70db47e4f6ce3e5c37a607355f80da8860a33226be640226ac52cb05ef2e/fsspec-2025.9.0-py3-none-any.whl", hash = "sha256:530dc2a2af60a414a832059574df4a6e10cce927f6f4a78209390fe38955cfb7", size = 199289, upload-time = "2025-09-02T19:10:47.708Z" },
 ]
 
 [package.optional-dependencies]
@@ -617,18 +598,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/6f/6d/0703ccc57f3a7233505399edb88de3cbd678da106337b9fcde432b65ed60/idna-3.11.tar.gz", hash = "sha256:795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902", size = 194582, upload-time = "2025-10-12T14:55:20.501Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0e/61/66938bbb5fc52dbdf84594873d5b51fb1f7c7794e9c0f5bd885f30bc507b/idna-3.11-py3-none-any.whl", hash = "sha256:771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea", size = 71008, upload-time = "2025-10-12T14:55:18.883Z" },
-]
-
-[[package]]
-name = "importlib-metadata"
-version = "8.7.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "zipp" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/76/66/650a33bd90f786193e4de4b3ad86ea60b53c89b669a5c7be931fac31cdb0/importlib_metadata-8.7.0.tar.gz", hash = "sha256:d13b81ad223b890aa16c5471f2ac3056cf76c5f10f82d6f9292f0b415f389000", size = 56641, upload-time = "2025-04-27T15:29:01.736Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/20/b0/36bd937216ec521246249be3bf9855081de4c5e06a0c9b4219dbeda50373/importlib_metadata-8.7.0-py3-none-any.whl", hash = "sha256:e5dd1551894c77868a30651cef00984d50e1002d06942a7101d34870c5f02afd", size = 27656, upload-time = "2025-04-27T15:29:00.214Z" },
 ]
 
 [[package]]
@@ -856,28 +825,18 @@ wheels = [
 
 [[package]]
 name = "multiprocess"
-version = "0.70.18"
+version = "0.70.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dill" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/72/fd/2ae3826f5be24c6ed87266bc4e59c46ea5b059a103f3d7e7eb76a52aeecb/multiprocess-0.70.18.tar.gz", hash = "sha256:f9597128e6b3e67b23956da07cf3d2e5cba79e2f4e0fba8d7903636663ec6d0d", size = 1798503, upload-time = "2025-04-17T03:11:27.742Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b5/ae/04f39c5d0d0def03247c2893d6f2b83c136bf3320a2154d7b8858f2ba72d/multiprocess-0.70.16.tar.gz", hash = "sha256:161af703d4652a0e1410be6abccecde4a7ddffd19341be0a7011b94aeb171ac1", size = 1772603, upload-time = "2024-01-28T18:52:34.85Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ba/d8/0cba6cf51a1a31f20471fbc823a716170c73012ddc4fb85d706630ed6e8f/multiprocess-0.70.18-py310-none-any.whl", hash = "sha256:60c194974c31784019c1f459d984e8f33ee48f10fcf42c309ba97b30d9bd53ea", size = 134948, upload-time = "2025-04-17T03:11:20.223Z" },
-    { url = "https://files.pythonhosted.org/packages/4b/88/9039f2fed1012ef584751d4ceff9ab4a51e5ae264898f0b7cbf44340a859/multiprocess-0.70.18-py311-none-any.whl", hash = "sha256:5aa6eef98e691281b3ad923be2832bf1c55dd2c859acd73e5ec53a66aae06a1d", size = 144462, upload-time = "2025-04-17T03:11:21.657Z" },
-    { url = "https://files.pythonhosted.org/packages/bf/b6/5f922792be93b82ec6b5f270bbb1ef031fd0622847070bbcf9da816502cc/multiprocess-0.70.18-py312-none-any.whl", hash = "sha256:9b78f8e5024b573730bfb654783a13800c2c0f2dfc0c25e70b40d184d64adaa2", size = 150287, upload-time = "2025-04-17T03:11:22.69Z" },
-    { url = "https://files.pythonhosted.org/packages/ee/25/7d7e78e750bc1aecfaf0efbf826c69a791d2eeaf29cf20cba93ff4cced78/multiprocess-0.70.18-py313-none-any.whl", hash = "sha256:871743755f43ef57d7910a38433cfe41319e72be1bbd90b79c7a5ac523eb9334", size = 151917, upload-time = "2025-04-17T03:11:24.044Z" },
-    { url = "https://files.pythonhosted.org/packages/3b/c3/ca84c19bd14cdfc21c388fdcebf08b86a7a470ebc9f5c3c084fc2dbc50f7/multiprocess-0.70.18-py38-none-any.whl", hash = "sha256:dbf705e52a154fe5e90fb17b38f02556169557c2dd8bb084f2e06c2784d8279b", size = 132636, upload-time = "2025-04-17T03:11:24.936Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/28/dd72947e59a6a8c856448a5e74da6201cb5502ddff644fbc790e4bd40b9a/multiprocess-0.70.18-py39-none-any.whl", hash = "sha256:e78ca805a72b1b810c690b6b4cc32579eba34f403094bbbae962b7b5bf9dfcb8", size = 133478, upload-time = "2025-04-17T03:11:26.253Z" },
-]
-
-[[package]]
-name = "mypy-extensions"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a2/6e/371856a3fb9d31ca8dac321cda606860fa4548858c0cc45d9d1d4ca2628b/mypy_extensions-1.1.0.tar.gz", hash = "sha256:52e68efc3284861e772bbcd66823fde5ae21fd2fdb51c62a211403730b916558", size = 6343, upload-time = "2025-04-22T14:54:24.164Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/79/7b/2c79738432f5c924bef5071f933bcc9efd0473bac3b4aa584a6f7c1c8df8/mypy_extensions-1.1.0-py3-none-any.whl", hash = "sha256:1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505", size = 4963, upload-time = "2025-04-22T14:54:22.983Z" },
+    { url = "https://files.pythonhosted.org/packages/bc/f7/7ec7fddc92e50714ea3745631f79bd9c96424cb2702632521028e57d3a36/multiprocess-0.70.16-py310-none-any.whl", hash = "sha256:c4a9944c67bd49f823687463660a2d6daae94c289adff97e0f9d696ba6371d02", size = 134824, upload-time = "2024-01-28T18:52:26.062Z" },
+    { url = "https://files.pythonhosted.org/packages/50/15/b56e50e8debaf439f44befec5b2af11db85f6e0f344c3113ae0be0593a91/multiprocess-0.70.16-py311-none-any.whl", hash = "sha256:af4cabb0dac72abfb1e794fa7855c325fd2b55a10a44628a3c1ad3311c04127a", size = 143519, upload-time = "2024-01-28T18:52:28.115Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/7d/a988f258104dcd2ccf1ed40fdc97e26c4ac351eeaf81d76e266c52d84e2f/multiprocess-0.70.16-py312-none-any.whl", hash = "sha256:fc0544c531920dde3b00c29863377f87e1632601092ea2daca74e4beb40faa2e", size = 146741, upload-time = "2024-01-28T18:52:29.395Z" },
+    { url = "https://files.pythonhosted.org/packages/ea/89/38df130f2c799090c978b366cfdf5b96d08de5b29a4a293df7f7429fa50b/multiprocess-0.70.16-py38-none-any.whl", hash = "sha256:a71d82033454891091a226dfc319d0cfa8019a4e888ef9ca910372a446de4435", size = 132628, upload-time = "2024-01-28T18:52:30.853Z" },
+    { url = "https://files.pythonhosted.org/packages/da/d9/f7f9379981e39b8c2511c9e0326d212accacb82f12fbfdc1aa2ce2a7b2b6/multiprocess-0.70.16-py39-none-any.whl", hash = "sha256:a0bafd3ae1b732eac64be2e72038231c1ba97724b60b09400d68f229fcc2fbf3", size = 133351, upload-time = "2024-01-28T18:52:31.981Z" },
 ]
 
 [[package]]
@@ -1130,7 +1089,7 @@ dependencies = [
     { name = "safetensors" },
     { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
     { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-9-cgo-26-ae-cuda'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "tqdm" },
     { name = "transformers" },
 ]
@@ -1305,19 +1264,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f2/a5/181488fc2b9d093e3972d2a472855aae8a03f000592dbfce716a512b3359/pyparsing-3.2.5.tar.gz", hash = "sha256:2df8d5b7b2802ef88e8d016a2eb9c7aeaa923529cd251ed0fe4608275d4105b6", size = 1099274, upload-time = "2025-09-21T04:11:06.277Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/10/5e/1aa9a93198c6b64513c9d7752de7422c06402de6600a8767da1524f9570b/pyparsing-3.2.5-py3-none-any.whl", hash = "sha256:e38a4f02064cf41fe6593d328d0512495ad1f3d8a91c4f73fc401b3079a59a5e", size = 113890, upload-time = "2025-09-21T04:11:04.117Z" },
-]
-
-[[package]]
-name = "pyre-extensions"
-version = "0.0.23"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "typing-extensions", marker = "platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux' or extra != 'extra-9-cgo-26-ae-cuda' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "typing-inspect", marker = "platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux' or extra != 'extra-9-cgo-26-ae-cuda' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7b/3e/de0f6cad8e2fd848760fec63271017e3ddfb92d59c67c29966b33cd683b8/pyre-extensions-0.0.23.tar.gz", hash = "sha256:df019263900af45e83e41fb9e889824e8b7bcdb9cb67fe2957bb80104eadcbc7", size = 9904, upload-time = "2021-11-01T21:27:56.798Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a1/b5/9427a61bb5e782125e4eb36abb4033f2ad13652d23800a00780596fdc21d/pyre_extensions-0.0.23-py3-none-any.whl", hash = "sha256:e945fdf4113172cec517c5daeca56f61f6632fd5b8d8165f1253c8865c87e62b", size = 11412, upload-time = "2021-11-01T21:27:55.143Z" },
 ]
 
 [[package]]
@@ -1662,8 +1608,8 @@ wheels = [
 
 [[package]]
 name = "torch"
-version = "2.9.0+rocm6.4"
-source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }
+version = "2.10.0.dev20251116+rocm7.0"
+source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }
 dependencies = [
     { name = "filelock", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "fsspec", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
@@ -1675,7 +1621,7 @@ dependencies = [
     { name = "typing-extensions", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:c8a8876e7c5bd8fdcc394289076d2b83295addad4f5ca60ea3865123d5dc9f76" },
+    { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:73f3e46a07ebb3ae4c8349a9d3e4f43f7a47c6b562993661a2b00c51a96abdc8" },
 ]
 
 [package.metadata]
@@ -1686,7 +1632,7 @@ requires-dist = [
     { name = "networkx", specifier = ">=2.5.1" },
     { name = "opt-einsum", marker = "extra == 'opt-einsum'", specifier = ">=3.3" },
     { name = "optree", marker = "extra == 'optree'", specifier = ">=0.13.0" },
-    { name = "pytorch-triton-rocm", marker = "sys_platform == 'linux'", specifier = "==3.5.0" },
+    { name = "pytorch-triton-rocm", marker = "sys_platform == 'linux'", specifier = "==3.5.1+gitbfeb0668" },
     { name = "pyyaml", marker = "extra == 'pyyaml'" },
     { name = "setuptools", marker = "python_full_version >= '3.12'" },
     { name = "sympy", specifier = ">=1.13.3" },
@@ -1761,15 +1707,15 @@ wheels = [
 
 [[package]]
 name = "torchvision"
-version = "0.24.0+rocm6.4"
-source = { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }
+version = "0.25.0.dev20251117+rocm7.0"
+source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }
 dependencies = [
     { name = "numpy", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "pillow", marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:9870a33a0ea37dae934b4fe77db3f5013c224c365bdcbbd56aa8c653c0c13677" },
+    { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:5bf0f117ad6f9596d2351c23c4125ed078495ec7615f6ad0dddf0d6d232845a8" },
 ]
 
 [package.metadata]
@@ -1778,7 +1724,7 @@ requires-dist = [
     { name = "numpy" },
     { name = "pillow", specifier = ">=5.3.0,!=8.3.*" },
     { name = "scipy", marker = "extra == 'scipy'" },
-    { name = "torch", specifier = "==2.9.0" },
+    { name = "torch", specifier = "==2.10.0.dev20251116" },
 ]
 provides-extras = ["gdown", "scipy"]
 
@@ -1883,19 +1829,6 @@ wheels = [
 ]
 
 [[package]]
-name = "typing-inspect"
-version = "0.9.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "mypy-extensions", marker = "platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux' or extra != 'extra-9-cgo-26-ae-cuda' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "typing-extensions", marker = "platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux' or extra != 'extra-9-cgo-26-ae-cuda' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/dc/74/1789779d91f1961fa9438e9a8710cdae6bd138c80d7303996933d117264a/typing_inspect-0.9.0.tar.gz", hash = "sha256:b23fc42ff6f6ef6954e4852c1fb512cdd18dbea03134f91f856a95ccc9461f78", size = 13825, upload-time = "2023-05-24T20:25:47.612Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/65/f3/107a22063bf27bdccf2024833d3445f4eea42b2e598abfbd46f6a63b6cb0/typing_inspect-0.9.0-py3-none-any.whl", hash = "sha256:9ee6fc59062311ef8547596ab6b955e1b8aa46242d854bfc78f4f6b0eff35f9f", size = 8827, upload-time = "2023-05-24T20:25:45.287Z" },
-]
-
-[[package]]
 name = "tyro"
 version = "0.9.35"
 source = { registry = "https://pypi.org/simple" }
@@ -1923,48 +1856,557 @@ wheels = [
 
 [[package]]
 name = "unsloth"
-version = "2025.11.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "accelerate" },
-    { name = "bitsandbytes", version = "0.48.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-cgo-26-ae-cuda' or extra != 'extra-9-cgo-26-ae-rocm'" },
-    { name = "bitsandbytes", version = "0.49.0.dev0", source = { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
-    { name = "datasets" },
-    { name = "diffusers" },
-    { name = "hf-transfer" },
-    { name = "huggingface-hub" },
-    { name = "numpy" },
-    { name = "packaging" },
-    { name = "peft" },
-    { name = "protobuf" },
-    { name = "psutil" },
-    { name = "sentencepiece" },
-    { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-9-cgo-26-ae-cuda'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
-    { name = "torchvision", version = "0.24.0", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-9-cgo-26-ae-cuda') or (platform_machine != 'aarch64' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (sys_platform != 'linux' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torchvision", version = "0.24.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torchvision", version = "0.24.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine != 'aarch64' and extra == 'extra-9-cgo-26-ae-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-9-cgo-26-ae-cuda') or (sys_platform != 'linux' and extra == 'extra-9-cgo-26-ae-cuda') or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torchvision", version = "0.24.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torchvision-0.24.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
-    { name = "tqdm" },
-    { name = "transformers" },
-    { name = "triton", marker = "'linux' in sys_platform or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "triton-windows", marker = "(platform_machine != 'AMD64' and platform_machine != 'x86_64' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (platform_machine == 'AMD64' and sys_platform == 'win32') or (platform_machine == 'x86_64' and sys_platform == 'win32') or (sys_platform != 'win32' and extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "trl" },
-    { name = "tyro" },
-    { name = "unsloth-zoo" },
-    { name = "wheel" },
-    { name = "xformers", marker = "sys_platform == 'never' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
+source = { editable = "submodules/unsloth" }
+
+[package.metadata]
+requires-dist = [
+    { name = "accelerate", marker = "extra == 'colab-no-deps'", specifier = ">=0.34.1" },
+    { name = "accelerate", marker = "extra == 'huggingfacenotorch'", specifier = ">=0.34.1" },
+    { name = "bitsandbytes", marker = "(platform_machine == 'AMD64' and sys_platform == 'win32' and extra == 'amd') or (platform_machine == 'x86_64' and sys_platform == 'win32' and extra == 'amd')", url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-win_amd64.whl" },
+    { name = "bitsandbytes", marker = "sys_platform == 'win32' and extra == 'windows'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "(platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'amd') or (platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'amd')", url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl" },
+    { name = "bitsandbytes", marker = "platform_machine == 'aarch64' and 'linux' in sys_platform and extra == 'amd'", url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_aarch64.whl" },
+    { name = "bitsandbytes", marker = "platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch280'", url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl" },
+    { name = "bitsandbytes", marker = "platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch290'", url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl" },
+    { name = "bitsandbytes", marker = "extra == 'colab-ampere-torch211'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'colab-ampere-torch220'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'colab-new'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'colab-no-deps'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'colab-torch211'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'colab-torch220'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch211'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch220'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch230'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch240'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch250'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch251'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch260'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch270'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch271'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-ampere-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch211'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch212'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch220'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch230'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch240'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch250'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch251'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch260'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch270'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch271'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu118-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere-torch211'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere-torch220'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere-torch230'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere-torch240'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere-torch250'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-ampere-torch251'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch211'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch212'", specifier = "==0.45.5" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch220'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch230'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch240'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch250'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu121-torch251'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-ampere-torch240'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-ampere-torch250'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-ampere-torch251'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-ampere-torch260'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-torch240'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-torch250'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-torch251'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu124-torch260'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-ampere-torch260'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-ampere-torch270'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-ampere-torch271'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-ampere-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-ampere-torch290'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-torch260'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-torch270'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-torch271'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu126-torch290'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-ampere-torch270'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-ampere-torch271'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-ampere-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-ampere-torch290'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-torch270'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-torch271'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu128-torch290'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu130-ampere-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu130-ampere-torch290'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu130-torch280'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'cu130-torch290'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "bitsandbytes", marker = "extra == 'kaggle-new'", specifier = ">=0.45.5,!=0.46.0,!=0.48.0" },
+    { name = "datasets", marker = "extra == 'colab-new'", specifier = ">=3.4.1,!=4.0.*,!=4.1.0,<4.4.0" },
+    { name = "datasets", marker = "extra == 'huggingfacenotorch'", specifier = ">=3.4.1,!=4.0.*,!=4.1.0,<4.4.0" },
+    { name = "diffusers", marker = "extra == 'huggingfacenotorch'" },
+    { name = "flash-attn", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiFALSE-cp39-cp39-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiTRUE-cp39-cp39-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp39-cp39-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiTRUE-cp39-cp39-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp39-cp39-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiTRUE-cp39-cp39-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiFALSE-cp310-cp310-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiTRUE-cp310-cp310-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp310-cp310-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiTRUE-cp310-cp310-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiTRUE-cp310-cp310-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiTRUE-cp311-cp311-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiTRUE-cp311-cp311-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiTRUE-cp311-cp311-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiFALSE-cp312-cp312-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiTRUE-cp312-cp312-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiTRUE-cp312-cp312-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp312-cp312-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiTRUE-cp312-cp312-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.13.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiFALSE-cp313-cp313-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.13.*' and 'linux' in sys_platform and extra == 'flashattentiontorch240abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiTRUE-cp313-cp313-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.13.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp313-cp313-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.13.*' and 'linux' in sys_platform and extra == 'flashattentiontorch250abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiTRUE-cp313-cp313-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.13.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abifalsecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "python_full_version == '3.13.*' and 'linux' in sys_platform and extra == 'flashattentiontorch260abitruecu12x'", url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiTRUE-cp313-cp313-linux_x86_64.whl" },
+    { name = "flash-attn", marker = "'linux' in sys_platform and extra == 'colab-ampere-torch211'", specifier = ">=2.6.3" },
+    { name = "flash-attn", marker = "'linux' in sys_platform and extra == 'colab-ampere-torch220'", specifier = ">=2.6.3" },
+    { name = "flash-attn", marker = "'linux' in sys_platform and extra == 'flashattention'", specifier = ">=2.6.3" },
+    { name = "hf-transfer", marker = "extra == 'colab-new'" },
+    { name = "hf-transfer", marker = "extra == 'huggingfacenotorch'" },
+    { name = "huggingface-hub", marker = "extra == 'colab-new'", specifier = ">=0.34.0" },
+    { name = "huggingface-hub", marker = "extra == 'huggingfacenotorch'", specifier = ">=0.34.0" },
+    { name = "ninja", marker = "'linux' in sys_platform and extra == 'flashattention'" },
+    { name = "ninja", marker = "extra == 'colab-ampere-torch211'" },
+    { name = "ninja", marker = "extra == 'colab-ampere-torch220'" },
+    { name = "numpy", marker = "extra == 'colab-new'" },
+    { name = "numpy", marker = "extra == 'huggingfacenotorch'" },
+    { name = "packaging", marker = "'linux' in sys_platform and extra == 'flashattention'" },
+    { name = "packaging", marker = "extra == 'colab-ampere-torch211'" },
+    { name = "packaging", marker = "extra == 'colab-ampere-torch220'" },
+    { name = "packaging", marker = "extra == 'colab-new'" },
+    { name = "packaging", marker = "extra == 'huggingfacenotorch'" },
+    { name = "peft", marker = "extra == 'colab-no-deps'", specifier = ">=0.7.1" },
+    { name = "peft", marker = "extra == 'huggingfacenotorch'", specifier = ">=0.7.1,!=0.11.0" },
+    { name = "protobuf", marker = "extra == 'colab-new'" },
+    { name = "protobuf", marker = "extra == 'colab-no-deps'" },
+    { name = "protobuf", marker = "extra == 'huggingfacenotorch'" },
+    { name = "psutil", marker = "extra == 'colab-new'" },
+    { name = "psutil", marker = "extra == 'huggingfacenotorch'" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.9.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.4.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.10.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.4.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.10.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.5.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.11.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.4.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.11.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.5.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.4.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.5.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.4.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.5.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.9.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.9.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.2.0-cp39-cp39-linux_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.9.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.9.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.3.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.10.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.10.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.2.0-cp310-cp310-linux_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.10.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.10.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.11.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.11.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.2.0-cp311-cp311-linux_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.11.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.11.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.3.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.12.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.12.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.2.0-cp312-cp312-linux_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.12.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.12.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.13.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.13.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.2.0-cp313-cp313-linux_x86_64.whl" },
+    { name = "pytorch-triton-xpu", marker = "(python_full_version == '3.13.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.13.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/pytorch_triton_xpu-3.3.0-cp313-cp313t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl" },
+    { name = "sentencepiece", marker = "extra == 'colab-new'", specifier = ">=0.2.0" },
+    { name = "sentencepiece", marker = "extra == 'huggingfacenotorch'", specifier = ">=0.2.0" },
+    { name = "torch", marker = "python_full_version == '3.9.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torch-2.8.0%2Bxpu-cp39-cp39-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.10.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torch-2.8.0%2Bxpu-cp310-cp310-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.10.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torch-2.9.0%2Bxpu-cp310-cp310-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.11.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torch-2.8.0%2Bxpu-cp311-cp311-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.11.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torch-2.9.0%2Bxpu-cp311-cp311-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torch-2.8.0%2Bxpu-cp312-cp312-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torch-2.9.0%2Bxpu-cp312-cp312-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torch-2.8.0%2Bxpu-cp313-cp313-linux_x86_64.whl" },
+    { name = "torch", marker = "python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torch-2.9.0%2Bxpu-cp313-cp313-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.9.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.9.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/xpu/torch-2.6.0%2Bxpu-cp39-cp39-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.9.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.9.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/xpu/torch-2.7.0%2Bxpu-cp39-cp39-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.10.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.10.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/xpu/torch-2.6.0%2Bxpu-cp310-cp310-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.10.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.10.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/xpu/torch-2.7.0%2Bxpu-cp310-cp310-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.11.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.11.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/xpu/torch-2.6.0%2Bxpu-cp311-cp311-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.11.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.11.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/xpu/torch-2.7.0%2Bxpu-cp311-cp311-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.12.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.12.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/xpu/torch-2.6.0%2Bxpu-cp312-cp312-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.12.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.12.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/xpu/torch-2.7.0%2Bxpu-cp312-cp312-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.13.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch260') or (python_full_version == '3.13.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch260')", url = "https://download.pytorch.org/whl/xpu/torch-2.6.0%2Bxpu-cp313-cp313-linux_x86_64.whl" },
+    { name = "torch", marker = "(python_full_version == '3.13.*' and platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'intelgputorch270') or (python_full_version == '3.13.*' and platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'intelgputorch270')", url = "https://download.pytorch.org/whl/xpu/torch-2.7.0%2Bxpu-cp313-cp313-linux_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.9.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.23.0%2Bxpu-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.10.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.23.0%2Bxpu-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.10.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.24.0%2Bxpu-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.11.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.23.0%2Bxpu-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.11.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.24.0%2Bxpu-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.23.0%2Bxpu-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.24.0%2Bxpu-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch280'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.23.0%2Bxpu-cp313-cp313-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'intelgputorch290'", url = "https://download.pytorch.org/whl/xpu/torchvision-0.24.0%2Bxpu-cp313-cp313-manylinux_2_28_x86_64.whl" },
+    { name = "torchvision", marker = "extra == 'huggingface'" },
+    { name = "tqdm", marker = "extra == 'colab-new'" },
+    { name = "tqdm", marker = "extra == 'huggingfacenotorch'" },
+    { name = "transformers", marker = "extra == 'colab-new'", specifier = ">=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2" },
+    { name = "transformers", marker = "extra == 'huggingfacenotorch'", specifier = ">=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2" },
+    { name = "triton", marker = "'linux' in sys_platform and extra == 'triton'", specifier = ">=3.0.0" },
+    { name = "triton-windows", marker = "(platform_machine == 'AMD64' and sys_platform == 'win32' and extra == 'triton') or (platform_machine == 'x86_64' and sys_platform == 'win32' and extra == 'triton')" },
+    { name = "trl", marker = "extra == 'colab-no-deps'", specifier = ">=0.18.2,!=0.19.0,<=0.24.0" },
+    { name = "trl", marker = "extra == 'huggingfacenotorch'", specifier = ">=0.18.2,!=0.19.0,<=0.24.0" },
+    { name = "tyro", marker = "extra == 'colab-new'" },
+    { name = "tyro", marker = "extra == 'huggingfacenotorch'" },
+    { name = "unsloth", extras = ["colab-ampere-torch220"], marker = "extra == 'colab-ampere'" },
+    { name = "unsloth", extras = ["cu118only"], marker = "extra == 'cu118'" },
+    { name = "unsloth", extras = ["cu118only"], marker = "extra == 'cu118-ampere'" },
+    { name = "unsloth", extras = ["cu118onlytorch211"], marker = "extra == 'cu118-ampere-torch211'" },
+    { name = "unsloth", extras = ["cu118onlytorch211"], marker = "extra == 'cu118-torch211'" },
+    { name = "unsloth", extras = ["cu118onlytorch212"], marker = "extra == 'cu118-torch212'" },
+    { name = "unsloth", extras = ["cu118onlytorch220"], marker = "extra == 'cu118-ampere-torch220'" },
+    { name = "unsloth", extras = ["cu118onlytorch220"], marker = "extra == 'cu118-torch220'" },
+    { name = "unsloth", extras = ["cu118onlytorch230"], marker = "extra == 'cu118-ampere-torch230'" },
+    { name = "unsloth", extras = ["cu118onlytorch230"], marker = "extra == 'cu118-torch230'" },
+    { name = "unsloth", extras = ["cu118onlytorch240"], marker = "extra == 'cu118-ampere-torch240'" },
+    { name = "unsloth", extras = ["cu118onlytorch240"], marker = "extra == 'cu118-torch240'" },
+    { name = "unsloth", extras = ["cu118onlytorch250"], marker = "extra == 'cu118-ampere-torch250'" },
+    { name = "unsloth", extras = ["cu118onlytorch250"], marker = "extra == 'cu118-torch250'" },
+    { name = "unsloth", extras = ["cu118onlytorch251"], marker = "extra == 'cu118-ampere-torch251'" },
+    { name = "unsloth", extras = ["cu118onlytorch251"], marker = "extra == 'cu118-torch251'" },
+    { name = "unsloth", extras = ["cu118onlytorch260"], marker = "extra == 'cu118-ampere-torch260'" },
+    { name = "unsloth", extras = ["cu118onlytorch260"], marker = "extra == 'cu118-torch260'" },
+    { name = "unsloth", extras = ["cu118onlytorch270"], marker = "extra == 'cu118-ampere-torch270'" },
+    { name = "unsloth", extras = ["cu118onlytorch270"], marker = "extra == 'cu118-torch270'" },
+    { name = "unsloth", extras = ["cu118onlytorch271"], marker = "extra == 'cu118-ampere-torch271'" },
+    { name = "unsloth", extras = ["cu118onlytorch271"], marker = "extra == 'cu118-torch271'" },
+    { name = "unsloth", extras = ["cu118onlytorch280"], marker = "extra == 'cu118-ampere-torch280'" },
+    { name = "unsloth", extras = ["cu118onlytorch280"], marker = "extra == 'cu118-torch280'" },
+    { name = "unsloth", extras = ["cu121"], marker = "extra == 'colab'" },
+    { name = "unsloth", extras = ["cu121only"], marker = "extra == 'cu121'" },
+    { name = "unsloth", extras = ["cu121only"], marker = "extra == 'cu121-ampere'" },
+    { name = "unsloth", extras = ["cu121onlytorch211"], marker = "extra == 'colab-ampere-torch211'" },
+    { name = "unsloth", extras = ["cu121onlytorch211"], marker = "extra == 'colab-torch211'" },
+    { name = "unsloth", extras = ["cu121onlytorch211"], marker = "extra == 'cu121-ampere-torch211'" },
+    { name = "unsloth", extras = ["cu121onlytorch211"], marker = "extra == 'cu121-torch211'" },
+    { name = "unsloth", extras = ["cu121onlytorch212"], marker = "extra == 'cu121-torch212'" },
+    { name = "unsloth", extras = ["cu121onlytorch220"], marker = "extra == 'colab-ampere-torch220'" },
+    { name = "unsloth", extras = ["cu121onlytorch220"], marker = "extra == 'colab-torch220'" },
+    { name = "unsloth", extras = ["cu121onlytorch220"], marker = "extra == 'cu121-ampere-torch220'" },
+    { name = "unsloth", extras = ["cu121onlytorch220"], marker = "extra == 'cu121-torch220'" },
+    { name = "unsloth", extras = ["cu121onlytorch230"], marker = "extra == 'cu121-ampere-torch230'" },
+    { name = "unsloth", extras = ["cu121onlytorch230"], marker = "extra == 'cu121-torch230'" },
+    { name = "unsloth", extras = ["cu121onlytorch240"], marker = "extra == 'cu121-ampere-torch240'" },
+    { name = "unsloth", extras = ["cu121onlytorch240"], marker = "extra == 'cu121-torch240'" },
+    { name = "unsloth", extras = ["cu121onlytorch250"], marker = "extra == 'cu121-ampere-torch250'" },
+    { name = "unsloth", extras = ["cu121onlytorch250"], marker = "extra == 'cu121-torch250'" },
+    { name = "unsloth", extras = ["cu121onlytorch251"], marker = "extra == 'cu121-ampere-torch251'" },
+    { name = "unsloth", extras = ["cu121onlytorch251"], marker = "extra == 'cu121-torch251'" },
+    { name = "unsloth", extras = ["cu124onlytorch240"], marker = "extra == 'cu124-ampere-torch240'" },
+    { name = "unsloth", extras = ["cu124onlytorch240"], marker = "extra == 'cu124-torch240'" },
+    { name = "unsloth", extras = ["cu124onlytorch250"], marker = "extra == 'cu124-ampere-torch250'" },
+    { name = "unsloth", extras = ["cu124onlytorch250"], marker = "extra == 'cu124-torch250'" },
+    { name = "unsloth", extras = ["cu124onlytorch251"], marker = "extra == 'cu124-ampere-torch251'" },
+    { name = "unsloth", extras = ["cu124onlytorch251"], marker = "extra == 'cu124-torch251'" },
+    { name = "unsloth", extras = ["cu124onlytorch260"], marker = "extra == 'cu124-ampere-torch260'" },
+    { name = "unsloth", extras = ["cu124onlytorch260"], marker = "extra == 'cu124-torch260'" },
+    { name = "unsloth", extras = ["cu126onlytorch260"], marker = "extra == 'cu126-ampere-torch260'" },
+    { name = "unsloth", extras = ["cu126onlytorch260"], marker = "extra == 'cu126-torch260'" },
+    { name = "unsloth", extras = ["cu126onlytorch270"], marker = "extra == 'cu126-ampere-torch270'" },
+    { name = "unsloth", extras = ["cu126onlytorch270"], marker = "extra == 'cu126-torch270'" },
+    { name = "unsloth", extras = ["cu126onlytorch271"], marker = "extra == 'cu126-ampere-torch271'" },
+    { name = "unsloth", extras = ["cu126onlytorch271"], marker = "extra == 'cu126-torch271'" },
+    { name = "unsloth", extras = ["cu126onlytorch280"], marker = "extra == 'cu126-ampere-torch280'" },
+    { name = "unsloth", extras = ["cu126onlytorch280"], marker = "extra == 'cu126-torch280'" },
+    { name = "unsloth", extras = ["cu126onlytorch290"], marker = "extra == 'cu126-ampere-torch290'" },
+    { name = "unsloth", extras = ["cu126onlytorch290"], marker = "extra == 'cu126-torch290'" },
+    { name = "unsloth", extras = ["cu128onlytorch270"], marker = "extra == 'cu128-ampere-torch270'" },
+    { name = "unsloth", extras = ["cu128onlytorch270"], marker = "extra == 'cu128-torch270'" },
+    { name = "unsloth", extras = ["cu128onlytorch271"], marker = "extra == 'cu128-ampere-torch271'" },
+    { name = "unsloth", extras = ["cu128onlytorch271"], marker = "extra == 'cu128-torch271'" },
+    { name = "unsloth", extras = ["cu128onlytorch280"], marker = "extra == 'cu128-ampere-torch280'" },
+    { name = "unsloth", extras = ["cu128onlytorch280"], marker = "extra == 'cu128-torch280'" },
+    { name = "unsloth", extras = ["cu128onlytorch290"], marker = "extra == 'cu128-ampere-torch290'" },
+    { name = "unsloth", extras = ["cu128onlytorch290"], marker = "extra == 'cu128-torch290'" },
+    { name = "unsloth", extras = ["cu130onlytorch280"], marker = "extra == 'cu130-ampere-torch280'" },
+    { name = "unsloth", extras = ["cu130onlytorch280"], marker = "extra == 'cu130-torch280'" },
+    { name = "unsloth", extras = ["cu130onlytorch290"], marker = "extra == 'cu130-ampere-torch290'" },
+    { name = "unsloth", extras = ["cu130onlytorch290"], marker = "extra == 'cu130-torch290'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'colab-ampere'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch211'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch220'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch230'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch240'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch250'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch251'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch260'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch270'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch271'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu118-ampere-torch280'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere-torch211'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere-torch220'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere-torch230'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere-torch240'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere-torch250'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu121-ampere-torch251'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu124-ampere-torch240'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu124-ampere-torch250'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu124-ampere-torch251'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu124-ampere-torch260'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu126-ampere-torch260'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu126-ampere-torch270'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu126-ampere-torch271'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu126-ampere-torch280'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu128-ampere-torch270'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu128-ampere-torch271'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu128-ampere-torch280'" },
+    { name = "unsloth", extras = ["flashattention"], marker = "extra == 'cu130-ampere-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'base'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'colab-ampere-torch211'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'colab-ampere-torch220'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'colab-torch211'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'colab-torch220'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'conda'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch211'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch220'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch230'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch240'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch250'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch251'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch260'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch270'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch271'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-ampere-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch211'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch212'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch220'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch230'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch240'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch250'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch251'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch260'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch270'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch271'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu118-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere-torch211'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere-torch220'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere-torch230'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere-torch240'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere-torch250'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-ampere-torch251'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch211'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch212'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch220'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch230'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch240'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch250'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu121-torch251'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-ampere-torch240'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-ampere-torch250'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-ampere-torch251'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-ampere-torch260'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-torch240'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-torch250'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-torch251'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu124-torch260'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-ampere-torch260'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-ampere-torch270'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-ampere-torch271'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-ampere-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-ampere-torch290'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-torch260'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-torch270'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-torch271'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu126-torch290'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-ampere-torch270'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-ampere-torch271'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-ampere-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-ampere-torch290'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-torch270'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-torch271'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu128-torch290'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu130-ampere-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu130-ampere-torch290'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu130-torch280'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'cu130-torch290'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'kaggle'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'kaggle-new'" },
+    { name = "unsloth", extras = ["huggingface"], marker = "extra == 'windows'" },
+    { name = "unsloth", extras = ["huggingfacenotorch"], marker = "extra == 'amd'" },
+    { name = "unsloth", extras = ["huggingfacenotorch"], marker = "extra == 'huggingface'" },
+    { name = "unsloth", extras = ["huggingfacenotorch"], marker = "extra == 'intelgputorch260'" },
+    { name = "unsloth", extras = ["huggingfacenotorch"], marker = "extra == 'intelgputorch270'" },
+    { name = "unsloth", extras = ["huggingfacenotorch"], marker = "extra == 'intelgputorch280'" },
+    { name = "unsloth", extras = ["huggingfacenotorch"], marker = "extra == 'intelgputorch290'" },
+    { name = "unsloth", extras = ["intelgputorch260"], marker = "extra == 'intel-gpu-torch260'" },
+    { name = "unsloth", extras = ["intelgputorch270"], marker = "extra == 'intel-gpu-torch270'" },
+    { name = "unsloth", extras = ["intelgputorch280"], marker = "extra == 'intel'" },
+    { name = "unsloth", extras = ["intelgputorch280"], marker = "extra == 'intel-gpu-torch280'" },
+    { name = "unsloth", extras = ["intelgputorch290"], marker = "extra == 'intel-gpu-torch290'" },
+    { name = "unsloth", extras = ["triton"], marker = "extra == 'colab-new'" },
+    { name = "unsloth", extras = ["triton"], marker = "extra == 'huggingface'" },
+    { name = "unsloth-zoo", marker = "extra == 'colab-new'", specifier = ">=2025.11.4" },
+    { name = "unsloth-zoo", marker = "extra == 'huggingface'", specifier = ">=2025.11.4" },
+    { name = "unsloth-zoo", extras = ["intelgpu"], marker = "extra == 'intelgputorch260'" },
+    { name = "unsloth-zoo", extras = ["intelgpu"], marker = "extra == 'intelgputorch270'" },
+    { name = "unsloth-zoo", extras = ["intelgpu"], marker = "extra == 'intelgputorch280'" },
+    { name = "unsloth-zoo", extras = ["intelgpu"], marker = "extra == 'intelgputorch290'" },
+    { name = "wheel", marker = "extra == 'colab-new'", specifier = ">=0.42.0" },
+    { name = "wheel", marker = "extra == 'huggingfacenotorch'", specifier = ">=0.42.0" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118only'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.22.post7%2Bcu118-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch211'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.23%2Bcu118-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch212'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.23.post1%2Bcu118-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch220'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.24%2Bcu118-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch230'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27%2Bcu118-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch240'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27.post2%2Bcu118-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch250'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.28.post2-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch251'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post1-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch260'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post3-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121only'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.22.post7-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch211'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.23-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch212'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.23.post1-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch220'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.24-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch230'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.27-cp39-cp39-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch240'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post1-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch250'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post2-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu121onlytorch251'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.29.post1-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and 'linux' in sys_platform and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp39-cp39-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118only'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.22.post7%2Bcu118-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch211'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.23%2Bcu118-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch212'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.23.post1%2Bcu118-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch220'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.24%2Bcu118-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch230'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27%2Bcu118-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch240'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27.post2%2Bcu118-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch250'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.28.post2-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch251'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post1-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch260'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post3-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121only'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.22.post7-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch211'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.23-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch212'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.23.post1-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch220'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.24-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch230'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.27-cp310-cp310-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch240'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post1-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch250'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post2-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu121onlytorch251'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.29.post1-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and 'linux' in sys_platform and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp310-cp310-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118only'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.22.post7%2Bcu118-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch211'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.23%2Bcu118-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch212'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.23.post1%2Bcu118-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch220'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.24%2Bcu118-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch230'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27%2Bcu118-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch240'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27.post2%2Bcu118-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch250'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.28.post2-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch251'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post1-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch260'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post3-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121only'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.22.post7-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch211'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.23-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch212'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.23.post1-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch220'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.24-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch230'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.27-cp311-cp311-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch240'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post1-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch250'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post2-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu121onlytorch251'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.29.post1-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and 'linux' in sys_platform and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp311-cp311-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu118onlytorch230'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27%2Bcu118-cp312-cp312-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu118onlytorch240'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.27.post2%2Bcu118-cp312-cp312-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu118onlytorch250'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.28.post2-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu118onlytorch251'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post1-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu118onlytorch260'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.29.post3-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu121onlytorch230'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.27-cp312-cp312-manylinux2014_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu121onlytorch240'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post1-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu121onlytorch250'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.28.post2-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu121onlytorch251'", url = "https://download.pytorch.org/whl/cu121/xformers-0.0.29.post1-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and 'linux' in sys_platform and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp312-cp312-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.9.*' and sys_platform == 'win32' and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp39-cp39-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.10.*' and sys_platform == 'win32' and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp310-cp310-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp311-cp311-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu118onlytorch270'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.30-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu124onlytorch240'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu124onlytorch250'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post2-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu124onlytorch251'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post1-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu124onlytorch260'", url = "https://download.pytorch.org/whl/cu124/xformers-0.0.29.post3-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu126onlytorch260'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.29.post3-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu126onlytorch270'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.30-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'cu128onlytorch270'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.30-cp312-cp312-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'cu118onlytorch271'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.31.post1-cp39-abi3-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'cu118onlytorch280'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.32.post2-cp39-abi3-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'cu126onlytorch271'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.31.post1-cp39-abi3-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'cu126onlytorch280'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.32.post2-cp39-abi3-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'cu128onlytorch271'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.31.post1-cp39-abi3-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'cu128onlytorch280'", url = "https://download.pytorch.org/whl/cu129/xformers-0.0.32.post2-cp39-abi3-win_amd64.whl" },
+    { name = "xformers", marker = "sys_platform == 'win32' and extra == 'windows'", specifier = ">=0.0.22.post7" },
+    { name = "xformers", marker = "(platform_machine == 'AMD64' and 'linux' in sys_platform and extra == 'colab-no-deps') or (platform_machine == 'x86_64' and 'linux' in sys_platform and extra == 'colab-no-deps') or (platform_machine == 'AMD64' and sys_platform == 'win32' and extra == 'colab-no-deps') or (platform_machine == 'x86_64' and sys_platform == 'win32' and extra == 'colab-no-deps')" },
+    { name = "xformers", marker = "'linux' in sys_platform and extra == 'cu118onlytorch271'", url = "https://download.pytorch.org/whl/cu118/xformers-0.0.31.post1-cp39-abi3-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "'linux' in sys_platform and extra == 'cu118onlytorch280'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.32.post2-cp39-abi3-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "'linux' in sys_platform and extra == 'cu126onlytorch271'", url = "https://download.pytorch.org/whl/cu126/xformers-0.0.31.post1-cp39-abi3-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "'linux' in sys_platform and extra == 'cu126onlytorch280'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.32.post2-cp39-abi3-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "'linux' in sys_platform and extra == 'cu128onlytorch271'", url = "https://download.pytorch.org/whl/cu128/xformers-0.0.31.post1-cp39-abi3-manylinux_2_28_x86_64.whl" },
+    { name = "xformers", marker = "'linux' in sys_platform and extra == 'cu128onlytorch280'", url = "https://download.pytorch.org/whl/cu129/xformers-0.0.32.post2-cp39-abi3-manylinux_2_28_x86_64.whl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/14/85/d3adac4a02021ffd08c0fd0cc4214a5f98647c139ec3a1ee9ad5722093ee/unsloth-2025.11.1.tar.gz", hash = "sha256:c06a1003484fd2c5dbd00752d7f2490de489df348ac129bb6a83364c125f3dc4", size = 4744603, upload-time = "2025-11-03T14:49:41.128Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/09/e52c139f75ba2bd2fed3834238fcdaf5ae5f38f168a8f68d5ab052fa09fb/unsloth-2025.11.1-py3-none-any.whl", hash = "sha256:67ab663e4f89817647ee343bffb400eeca3a1725470bbfc1509ef2c42ef0f418", size = 348780, upload-time = "2025-11-03T14:49:37.91Z" },
-]
+provides-extras = ["triton", "huggingfacenotorch", "huggingface", "windows", "base", "cu118only", "cu121only", "cu118onlytorch211", "cu121onlytorch211", "cu118onlytorch212", "cu121onlytorch212", "cu118onlytorch220", "cu121onlytorch220", "cu118onlytorch230", "cu121onlytorch230", "cu118onlytorch240", "cu121onlytorch240", "cu124onlytorch240", "cu118onlytorch250", "cu121onlytorch250", "cu124onlytorch250", "cu118onlytorch251", "cu121onlytorch251", "cu124onlytorch251", "cu118onlytorch260", "cu124onlytorch260", "cu126onlytorch260", "cu118onlytorch270", "cu126onlytorch270", "cu128onlytorch270", "cu118onlytorch271", "cu126onlytorch271", "cu128onlytorch271", "cu118onlytorch280", "cu126onlytorch280", "cu128onlytorch280", "cu130onlytorch280", "cu126onlytorch290", "cu128onlytorch290", "cu130onlytorch290", "cu118", "cu121", "cu118-torch211", "cu121-torch211", "cu118-torch212", "cu121-torch212", "cu118-torch220", "cu121-torch220", "cu118-torch230", "cu121-torch230", "cu118-torch240", "cu121-torch240", "cu124-torch240", "cu118-torch250", "cu121-torch250", "cu124-torch250", "cu118-torch251", "cu121-torch251", "cu124-torch251", "cu118-torch260", "cu124-torch260", "cu126-torch260", "cu118-torch270", "cu126-torch270", "cu128-torch270", "cu118-torch271", "cu126-torch271", "cu128-torch271", "cu118-torch280", "cu126-torch280", "cu128-torch280", "cu130-torch280", "cu126-torch290", "cu128-torch290", "cu130-torch290", "kaggle", "kaggle-new", "conda", "colab-torch211", "colab-ampere-torch211", "colab-torch220", "colab-ampere-torch220", "colab-new", "colab-no-deps", "colab", "flashattention", "colab-ampere", "cu118-ampere", "cu121-ampere", "cu118-ampere-torch211", "cu121-ampere-torch211", "cu118-ampere-torch220", "cu121-ampere-torch220", "cu118-ampere-torch230", "cu121-ampere-torch230", "cu118-ampere-torch240", "cu121-ampere-torch240", "cu124-ampere-torch240", "cu118-ampere-torch250", "cu121-ampere-torch250", "cu124-ampere-torch250", "cu118-ampere-torch251", "cu121-ampere-torch251", "cu124-ampere-torch251", "cu118-ampere-torch260", "cu124-ampere-torch260", "cu126-ampere-torch260", "cu118-ampere-torch270", "cu126-ampere-torch270", "cu128-ampere-torch270", "cu118-ampere-torch271", "cu126-ampere-torch271", "cu128-ampere-torch271", "cu118-ampere-torch280", "cu126-ampere-torch280", "cu128-ampere-torch280", "cu130-ampere-torch280", "cu126-ampere-torch290", "cu128-ampere-torch290", "cu130-ampere-torch290", "flashattentiontorch260abifalsecu12x", "flashattentiontorch260abitruecu12x", "flashattentiontorch250abifalsecu12x", "flashattentiontorch250abitruecu12x", "flashattentiontorch240abifalsecu12x", "flashattentiontorch240abitruecu12x", "intelgputorch260", "intel-gpu-torch260", "intelgputorch270", "intel-gpu-torch270", "intelgputorch280", "intel-gpu-torch280", "intelgputorch290", "intel-gpu-torch290", "intel", "amd"]
 
 [[package]]
 name = "unsloth-zoo"
-version = "2025.11.2"
-source = { registry = "https://pypi.org/simple" }
+source = { editable = "submodules/unsloth-zoo" }
 dependencies = [
     { name = "accelerate" },
     { name = "cut-cross-entropy" },
@@ -1983,7 +2425,7 @@ dependencies = [
     { name = "sentencepiece" },
     { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
     { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-9-cgo-26-ae-cuda'" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
+    { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
     { name = "torchao" },
     { name = "tqdm" },
     { name = "transformers" },
@@ -1994,10 +2436,61 @@ dependencies = [
     { name = "tyro" },
     { name = "wheel" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fb/9c/6918f568ae91b1c2e56d3820784e538fe39acbc0b3a86f5ae9c25b8245c3/unsloth_zoo-2025.11.2.tar.gz", hash = "sha256:7cfc1b76c1abc6f7e41ef84648dd923fbd92b38ed0e1272562356ad9a7f7acc3", size = 259407, upload-time = "2025-11-06T13:48:12.231Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/c4/5971b0bf52885021da67af1879a8db7d7c3dcd7d576cf1e58fda462d575f/unsloth_zoo-2025.11.2-py3-none-any.whl", hash = "sha256:eba103c75e00439cc19b33ca0319e018dae43ecd414fc1c39981e75a4b2cdf4d", size = 278200, upload-time = "2025-11-06T13:48:10.42Z" },
+
+[package.metadata]
+requires-dist = [
+    { name = "accelerate", specifier = ">=0.34.1" },
+    { name = "accelerate", marker = "extra == 'huggingface'", specifier = ">=0.34.1" },
+    { name = "cut-cross-entropy", marker = "python_full_version >= '3.10'" },
+    { name = "cut-cross-entropy", marker = "python_full_version >= '3.10' and extra == 'huggingface'" },
+    { name = "datasets", specifier = ">=3.4.1,!=4.0.*,!=4.1.0,<4.4.0" },
+    { name = "datasets", marker = "extra == 'huggingface'", specifier = ">=3.4.1,!=4.0.*,!=4.1.0,<4.4.0" },
+    { name = "filelock" },
+    { name = "filelock", marker = "extra == 'huggingface'" },
+    { name = "hf-transfer" },
+    { name = "hf-transfer", marker = "extra == 'huggingface'" },
+    { name = "huggingface-hub", specifier = ">=0.34.0" },
+    { name = "huggingface-hub", marker = "extra == 'huggingface'", specifier = ">=0.34.0" },
+    { name = "msgspec" },
+    { name = "msgspec", marker = "extra == 'huggingface'" },
+    { name = "numpy" },
+    { name = "numpy", marker = "extra == 'huggingface'" },
+    { name = "packaging", specifier = ">=24.1" },
+    { name = "packaging", marker = "extra == 'huggingface'", specifier = ">=24.1" },
+    { name = "peft", specifier = ">=0.7.1,!=0.11.0" },
+    { name = "peft", marker = "extra == 'huggingface'", specifier = ">=0.7.1,!=0.11.0" },
+    { name = "pillow" },
+    { name = "pillow", marker = "extra == 'huggingface'" },
+    { name = "protobuf" },
+    { name = "protobuf", marker = "extra == 'huggingface'" },
+    { name = "psutil" },
+    { name = "psutil", marker = "extra == 'huggingface'" },
+    { name = "regex" },
+    { name = "regex", marker = "extra == 'huggingface'" },
+    { name = "sentencepiece", specifier = ">=0.2.0" },
+    { name = "sentencepiece", marker = "extra == 'huggingface'", specifier = ">=0.2.0" },
+    { name = "torch", specifier = ">=2.4.0" },
+    { name = "torch", marker = "extra == 'intelgpu'", specifier = ">=2.4.0" },
+    { name = "torchao", specifier = ">=0.13.0" },
+    { name = "tqdm" },
+    { name = "tqdm", marker = "extra == 'huggingface'" },
+    { name = "transformers", specifier = ">=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,<=4.57.2" },
+    { name = "transformers", marker = "extra == 'huggingface'", specifier = ">=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,<=4.57.2" },
+    { name = "triton", marker = "'linux' in sys_platform", specifier = ">=3.0.0" },
+    { name = "triton", marker = "'linux' in sys_platform and extra == 'intelgpu'", specifier = ">=3.0.0" },
+    { name = "triton-windows", marker = "(platform_machine == 'AMD64' and sys_platform == 'win32') or (platform_machine == 'x86_64' and sys_platform == 'win32')" },
+    { name = "trl", specifier = ">=0.18.2,!=0.19.0,<=0.24.0" },
+    { name = "trl", marker = "extra == 'huggingface'", specifier = ">=0.18.2,!=0.19.0,<=0.24.0" },
+    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "extra == 'huggingface'" },
+    { name = "tyro" },
+    { name = "tyro", marker = "extra == 'huggingface'" },
+    { name = "unsloth-zoo", extras = ["huggingface"], marker = "extra == 'base'" },
+    { name = "unsloth-zoo", extras = ["huggingface"], marker = "extra == 'intelgpu'" },
+    { name = "wheel", specifier = ">=0.42.0" },
+    { name = "wheel", marker = "extra == 'huggingface'", specifier = ">=0.42.0" },
 ]
+provides-extras = ["huggingface", "base", "intelgpu"]
 
 [[package]]
 name = "urllib3"
@@ -2016,19 +2509,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/8a/98/2d9906746cdc6a6ef
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl", hash = "sha256:708e7481cc80179af0e556bbf0cc00b8444c7321e2700b8d8580231d13017248", size = 72494, upload-time = "2024-11-23T00:18:21.207Z" },
 ]
-
-[[package]]
-name = "xformers"
-version = "0.0.13"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy", marker = "platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux' or extra != 'extra-9-cgo-26-ae-cuda' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "pyre-extensions", marker = "platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux' or extra != 'extra-9-cgo-26-ae-cuda' or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm') or (extra != 'extra-9-cgo-26-ae-cuda' and extra != 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine != 'aarch64' and extra == 'extra-9-cgo-26-ae-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-9-cgo-26-ae-cuda') or (sys_platform != 'linux' and extra == 'extra-9-cgo-26-ae-cuda') or (extra == 'extra-9-cgo-26-ae-cuda' and extra == 'extra-9-cgo-26-ae-rocm')" },
-    { name = "torch", version = "2.9.0+rocm6.4", source = { url = "https://download.pytorch.org/whl/rocm6.4/torch-2.9.0%2Brocm6.4-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-9-cgo-26-ae-rocm'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/fd/20/da92c5ee5d20cb34e35a630ecf42a6dcd22523d5cb5adb56a0ffe8d03cfa/xformers-0.0.13.tar.gz", hash = "sha256:cd69df439ece812c37ed2d3b71cf5588f7d330d0d2f572ffc1025e1b215048ad", size = 292457, upload-time = "2022-09-26T21:37:53.881Z" }
 
 [[package]]
 name = "xxhash"
@@ -2112,13 +2592,4 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/31/74/8b74bae38ed7fe6793d0c15a0c8207bbb819cf287788459e5ed230996cdd/yarl-1.22.0-cp313-cp313t-win_amd64.whl", hash = "sha256:ff86011bd159a9d2dfc89c34cfd8aff12875980e3bd6a39ff097887520e60249", size = 93715, upload-time = "2025-10-06T14:11:11.739Z" },
     { url = "https://files.pythonhosted.org/packages/69/66/991858aa4b5892d57aef7ee1ba6b4d01ec3b7eb3060795d34090a3ca3278/yarl-1.22.0-cp313-cp313t-win_arm64.whl", hash = "sha256:7861058d0582b847bc4e3a4a4c46828a410bca738673f35a29ba3ca5db0b473b", size = 83857, upload-time = "2025-10-06T14:11:13.586Z" },
     { url = "https://files.pythonhosted.org/packages/73/ae/b48f95715333080afb75a4504487cbe142cae1268afc482d06692d605ae6/yarl-1.22.0-py3-none-any.whl", hash = "sha256:1380560bdba02b6b6c90de54133c81c9f2a453dee9912fe58c1dcced1edb7cff", size = 46814, upload-time = "2025-10-06T14:12:53.872Z" },
-]
-
-[[package]]
-name = "zipp"
-version = "3.23.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/e3/02/0f2892c661036d50ede074e376733dca2ae7c6eb617489437771209d4180/zipp-3.23.0.tar.gz", hash = "sha256:a07157588a12518c9d4034df3fbbee09c814741a33ff63c05fa29d26a2404166", size = 25547, upload-time = "2025-06-08T17:06:39.4Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/54/647ade08bf0db230bfea292f893923872fd20be6ac6f53b2b936ba839d75/zipp-3.23.0-py3-none-any.whl", hash = "sha256:071652d6115ed432f5ce1d34c336c0adfd6a884660d1e9712a256d3d3bd4b14e", size = 10276, upload-time = "2025-06-08T17:06:38.034Z" },
 ]

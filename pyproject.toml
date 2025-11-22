@@ -58,7 +58,7 @@ torchvision = [
     { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"}
 ]
 bitsandbytes = [
-    { path = "./submodules/bitsandbytes", editable=true, extra = "rocm"}
+    { url = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_main/bitsandbytes-1.33.7.preview-py3-none-manylinux_2_24_x86_64.whl", extra = "rocm"}
 ]
 
 [[tool.uv.index]]

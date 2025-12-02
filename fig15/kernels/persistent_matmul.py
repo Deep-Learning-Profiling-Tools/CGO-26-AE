@@ -129,7 +129,7 @@ def persistent_matmul(a, b):
         NUM_SMS=NUM_SMS,
         BLOCK_SIZE_M=64,
         BLOCK_SIZE_N=64,
-        BLOCK_SIZE_K=64,
+        BLOCK_SIZE_K=32,
         GROUP_SIZE_M=8,
     )
 

@@ -213,7 +213,7 @@ def get_cublas_tflops(dtype):
             dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fnuz}[dtype]
         else:
             raise RuntimeError(f"Unsupported CDNA version: {get_cdna_version()}")
-        c_dtype = dtype
+        c_dtype = torch.float16
         hipblas = amd.hipblas.HipblasLt(cublas_workspace)
         bench_fn = hipblas.matmul
     else:

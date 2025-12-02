@@ -1,6 +1,7 @@
 import ctypes
 import matplotlib.pyplot as plt
 import triton
+from triton_kernels.target_info import get_cdna_version
 from triton._C.libtriton import nvidia, amd
 import torch
 import csv
@@ -199,12 +200,20 @@ def get_memset_tbps():
 
 
 def get_cublas_tflops(dtype):
-    dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fn}[dtype]
     cublas_workspace = torch.empty(32 * 1024 * 1024, device="cuda", dtype=torch.uint8)
     if is_cuda():
+        dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fn}[dtype]
+        c_dtype = dtype
         cublas = nvidia.cublas.CublasLt(cublas_workspace)
         bench_fn = cublas.matmul
     elif is_hip():
+        if get_cdna_version() == 4:
+            dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fn}[dtype]
+        elif get_cdna_version() == 3:
+            dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fnuz}[dtype]
+        else:
+            raise RuntimeError(f"Unsupported CDNA version: {get_cdna_version()}")
+        c_dtype = dtype
         hipblas = amd.hipblas.HipblasLt(cublas_workspace)
         bench_fn = hipblas.matmul
     else:
@@ -213,7 +222,7 @@ def get_cublas_tflops(dtype):
     M, N, K = 8192, 8192, 8192
     a = torch.randn(M, K, device=device, dtype=torch.float32).to(dtype)
     b = torch.randn(K, N, device=device, dtype=torch.float32).to(dtype).T
-    c = torch.empty((M, N), device=device, dtype=dtype)
+    c = torch.empty((M, N), device=device, dtype=c_dtype)
     time_ms = triton.testing.do_bench(lambda: bench_fn(a, b, c), rep=1000)
     return 2 * M * N * K / time_ms * 1e-9
 

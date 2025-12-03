@@ -39,9 +39,21 @@ Before proceeding, make sure you have activated python env by `. .venv/bin/activ
 
 ###  Figure 13 and Figure 14
 
-
 1. `cd fig13_14`
-2. Start experiments by `python run_experiment_nv.py` if on NVIDIA or `python run_experiment_amd.py` if on AMD. The results will be both displayed in terminal and stored in a json file.
+2. Run experiments:
+   - NVIDIA: `python run_experiment_nv.py`
+   - AMD: Due to rocprof incompatibility with ROCm 7+, first downgrade to ROCm 6.4:
+     - `uv pip uninstall torch torchvision triton`
+     - `uv pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm6.4`
+     - `uv pip install triton==3.4.0`
+
+     Then run: `python run_experiment_amd.py`
+
+     After completion, restore the environment:
+     - `cd ..`
+     - `uv sync --extra rocm`
+
+   The results will be both displayed in terminal and stored in a json file.
 3. Plot Figure 13 by `python fig13.py`. The script will automatically read json file and plot AMD part of the figure.
 4. Plot Figure 14 by `python fig14.py`.
 5. Check generated `fig13.pdf` and `fig14.pdf`

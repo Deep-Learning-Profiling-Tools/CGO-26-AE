@@ -1,6 +1,7 @@
 import ctypes
 import matplotlib.pyplot as plt
 import triton
+from triton_kernels.target_info import get_cdna_version
 from triton._C.libtriton import nvidia, amd
 import torch
 import csv
@@ -9,11 +10,77 @@ import inspect
 from .target_info import is_hip, is_cuda
 
 
+# Theoretical machine limits pulled from vendor datasheets (values in TB/s and TFLOP/s).
+MACHINE_UPPER_BOUNDS = {
+    "gh200": {
+        "display": "GH200 upper bound",
+        "tbps": 4.0,
+        "tflops": {
+            "fp16": 989,
+            "bf16": 989,
+            "fp8": 1979,
+        },
+    },
+    "h100": {
+        "display": "H100 upper bound",
+        "tbps": 3.35,
+        "tflops": {
+            "fp16": 989,
+            "bf16": 989,
+            "fp8": 1979,
+        },
+    },
+    "mi300x": {
+        "display": "MI300X upper bound",
+        "tbps": 5.3,
+        "tflops": {
+            "fp16": 1300,
+            "bf16": 1300,
+            "fp8": 2600,
+        },
+    },
+}
+
+
 @dataclass
 class PerfRecord:
     time_ns: float
     flops: float
     bytes: float
+
+
+def _detect_machine_type():
+    if not torch.cuda.is_available():
+        return None
+    try:
+        name = torch.cuda.get_device_name(0).lower()
+    except (AssertionError, RuntimeError):
+        return None
+    if "mi300" in name:
+        return "mi300x"
+    if "gh200" in name or "grace hopper" in name:
+        return "gh200"
+    if "h100" in name or "hopper" in name:
+        return "h100"
+    return None
+
+
+def get_machine_upper_bounds_for_dtype(dtype):
+    machine = _detect_machine_type()
+    if not machine:
+        return None
+    bounds = MACHINE_UPPER_BOUNDS.get(machine)
+    if not bounds:
+        return None
+    tflops = bounds["tflops"].get(dtype)
+    if tflops is None:
+        return None
+    return {
+        "machine": machine,
+        "label": bounds["display"],
+        "tbps": bounds["tbps"],
+        "tflops": tflops,
+    }
 
 
 def parse_profile(profile_path, useful_op_regex):
@@ -133,12 +200,20 @@ def get_memset_tbps():
 
 
 def get_cublas_tflops(dtype):
-    dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fn}[dtype]
     cublas_workspace = torch.empty(32 * 1024 * 1024, device="cuda", dtype=torch.uint8)
     if is_cuda():
+        dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fn}[dtype]
+        c_dtype = dtype
         cublas = nvidia.cublas.CublasLt(cublas_workspace)
         bench_fn = cublas.matmul
     elif is_hip():
+        if get_cdna_version() == 4:
+            dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fn}[dtype]
+        elif get_cdna_version() == 3:
+            dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp8": torch.float8_e4m3fnuz}[dtype]
+        else:
+            raise RuntimeError(f"Unsupported CDNA version: {get_cdna_version()}")
+        c_dtype = torch.float16
         hipblas = amd.hipblas.HipblasLt(cublas_workspace)
         bench_fn = hipblas.matmul
     else:
@@ -147,7 +222,7 @@ def get_cublas_tflops(dtype):
     M, N, K = 8192, 8192, 8192
     a = torch.randn(M, K, device=device, dtype=torch.float32).to(dtype)
     b = torch.randn(K, N, device=device, dtype=torch.float32).to(dtype).T
-    c = torch.empty((M, N), device=device, dtype=dtype)
+    c = torch.empty((M, N), device=device, dtype=c_dtype)
     time_ms = triton.testing.do_bench(lambda: bench_fn(a, b, c), rep=1000)
     return 2 * M * N * K / time_ms * 1e-9
 
@@ -196,35 +271,45 @@ def plot_roofline(series, flops_dtype, out_path, max_tbps="memset", max_tflops="
         assert max_tflops == "cublas"
         max_tflops = get_cublas_tflops(flops_dtype)
 
-    grey = "#7f7f7f"
+    orange = "#f68b56"
+    grey = "#6f6f6f"
     opints = [f / b for f, b in zip(flops_ref, bytes_ref)]  # arithmetic intensity per sample
-    kappa = max_tflops / max_tbps  # intensity at the knee
+    def build_roofline_segments(tbps, tflops):
+        kappa_val = tflops / tbps  # intensity at the knee
+        knee_idx_val = bisect_left(opints, kappa_val)
+        if knee_idx_val <= 0:
+            x_knee_val = xs[0]
+        elif knee_idx_val >= n:
+            x_knee_val = xs[-1]
+        else:
+            i0, i1 = knee_idx_val - 1, knee_idx_val
+            denom = opints[i1] - opints[i0]
+            t = (kappa_val - opints[i0]) / denom if denom != 0 else 0.0
+            x_knee_val = xs[i0] + t * (xs[i1] - xs[i0])
 
-    # --- knee interpolation ---
-    knee_idx = bisect_left(opints, kappa)
-    if knee_idx <= 0:
-        x_knee = xs[0]
-    elif knee_idx >= n:
-        x_knee = xs[-1]
-    else:
-        i0, i1 = knee_idx - 1, knee_idx
-        t = (kappa - opints[i0]) / (opints[i1] - opints[i0])
-        x_knee = xs[i0] + t * (xs[i1] - xs[i0])
+        if knee_idx_val >= n:
+            bw_x_val, bw_y_val = xs[:], [op * tbps for op in opints]
+            comp_x_val, comp_y_val = [], []
+        elif knee_idx_val <= 0:
+            bw_x_val, bw_y_val = [], []
+            comp_x_val, comp_y_val = xs[:], [tflops] * n
+        else:
+            bw_x_val = xs[:knee_idx_val] + [x_knee_val]
+            bw_y_val = [op * tbps for op in opints[:knee_idx_val]] + [tflops]
+            comp_x_val = [x_knee_val] + xs[knee_idx_val:]
+            comp_y_val = [tflops] * (1 + (n - knee_idx_val))
 
-    # --- piecewise roofline segments (for plotting the grey guideline) ---
-    if knee_idx >= n:
-        bw_x, bw_y = xs[:], [op * max_tbps for op in opints]
-        comp_x, comp_y = [], []
-    elif knee_idx <= 0:
-        bw_x, bw_y = [], []
-        comp_x, comp_y = xs[:], [max_tflops] * n
-    else:
-        bw_x = xs[:knee_idx] + [x_knee]
-        bw_y = [op * max_tbps for op in opints[:knee_idx]] + [max_tflops]
-        comp_x = [x_knee] + xs[knee_idx:]
-        comp_y = [max_tflops] * (1 + (n - knee_idx))
+        y_roof_val = [min(op * tbps, tflops) for op in opints]
+        return {
+            "bw_x": bw_x_val,
+            "bw_y": bw_y_val,
+            "comp_x": comp_x_val,
+            "comp_y": comp_y_val,
+            "y_roof": y_roof_val,
+        }
 
-    y_roof = [min(op * max_tbps, max_tflops) for op in opints]
+    orange_segments = build_roofline_segments(max_tbps, max_tflops)
+    y_roof = orange_segments["y_roof"]
 
     # --- helpers ---
     def interp(yxs, yys, x):
@@ -252,11 +337,27 @@ def plot_roofline(series, flops_dtype, out_path, max_tbps="memset", max_tflops="
     ax.set_ylabel("performance  [TFLOP/s]")
     ax.set_title(title)
 
-    # Grey roofline (guides)
-    if bw_x:
-        ax.plot(bw_x, bw_y, ls="--", color=grey, label=f"BW-bound - {max_tbps:.1f} TB/s [memset]")
-    if comp_x:
-        ax.plot(comp_x, comp_y, ls=":", color=grey, label=f"Compute-bound - {max_tflops:.0f} TFLOP/s [cuBLAS]")
+    # orange roofline (guides)
+    if orange_segments["bw_x"]:
+        ax.plot(orange_segments["bw_x"], orange_segments["bw_y"], ls="--", color=orange,
+                label=f"BW-bound - {max_tbps:.1f} TB/s [memset]")
+    if orange_segments["comp_x"]:
+        ax.plot(orange_segments["comp_x"], orange_segments["comp_y"], ls=":", color=orange,
+                label=f"Compute-bound - {max_tflops:.0f} TFLOP/s [cuBLAS]")
+
+    machine_bounds = get_machine_upper_bounds_for_dtype(flops_dtype)
+    yaxis_roof = max_tflops
+    if machine_bounds:
+        theoretical_segments = build_roofline_segments(machine_bounds["tbps"], machine_bounds["tflops"])
+        bw_label = f"{machine_bounds['label']} BW - {machine_bounds['tbps']:.1f} TB/s"
+        comp_label = f"{machine_bounds['label']} Compute - {machine_bounds['tflops']:.0f} TFLOP/s"
+        if theoretical_segments["bw_x"]:
+            ax.plot(theoretical_segments["bw_x"], theoretical_segments["bw_y"], ls="--", color=grey, alpha=0.8,
+                    label=bw_label)
+        if theoretical_segments["comp_x"]:
+            ax.plot(theoretical_segments["comp_x"], theoretical_segments["comp_y"], ls=":", color=grey, alpha=0.8,
+                    label=comp_label)
+        yaxis_roof = max(yaxis_roof, machine_bounds["tflops"])
 
     # Series
     for lab, perf in zip(series_labels, series_perf):
@@ -266,7 +367,9 @@ def plot_roofline(series, flops_dtype, out_path, max_tbps="memset", max_tflops="
     xmin, xmax = xs[0], xs[-1]
     dx = 0.05 * (xmax - xmin) if xmax > xmin else 1.0
     ax.set_xlim(xmin - dx, xmax + dx)
-    ax.set_ylim(min(min(perf) for perf in series_perf) * 0.8 if series_perf else 0.0, max_tflops * 1.05)
+    ymax = yaxis_roof * 1.05 if yaxis_roof > 0 else 1.0
+    ymin = min(min(perf) for perf in series_perf) * 0.8 if series_perf else 0.0
+    ax.set_ylim(ymin, ymax)
 
     # Points of interest
     if points_of_interest:

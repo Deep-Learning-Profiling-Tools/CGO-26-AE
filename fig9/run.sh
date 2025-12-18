@@ -1,11 +1,11 @@
+#!/bin/bash
 
-uv pip install -e triton_kernels/
+echo "Running matmul benchmark without loop flattening..."
 
-(
-    set -x
-    cd triton_kernels/bench
-    
-    export NCCL_DEBUG=WARN
-    python bench_mlp.py
-    cd -
-)
+python3 ./main.py
+
+echo "Running matmul benchmark with loop flattening..."
+
+python3 ./main.py --flatten-loops
+
+proton-viewer -m tflop8/s -diff matmul.hatchet matmul_flatten.hatchet

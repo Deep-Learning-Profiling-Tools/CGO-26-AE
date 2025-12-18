@@ -180,7 +180,7 @@ for i, name in enumerate(labels):
 # X-limits - reduce margins on both sides
 bax.set_xlim(-0.5, len(labels) - 0.5)
 
-pdf_path = "fig13.pdf"
+pdf_path = "fig14.pdf"
 fig.savefig(pdf_path, dpi=300, bbox_inches="tight")
 plt.close(fig)
 
